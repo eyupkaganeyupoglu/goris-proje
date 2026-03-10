@@ -1,0 +1,325 @@
+/* ── Reset & Base ──────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:         #0d0f14;
+  --bg-panel:   #13161f;
+  --bg-card:    #1a1e2b;
+  --border:     #252a3a;
+  --accent:     #6366f1;
+  --accent-2:   #818cf8;
+  --accent-glow: rgba(99, 102, 241, 0.25);
+  --text:       #e2e8f0;
+  --text-muted: #64748b;
+  --text-dim:   #94a3b8;
+  --success:    #22c55e;
+  --danger:     #ef4444;
+  --radius:     12px;
+  --radius-sm:  8px;
+  --font:       'Inter', system-ui, sans-serif;
+  --transition: 0.2s ease;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ────────────────────────────────────────────────────────────────── */
+.header {
+  background: linear-gradient(135deg, #191c2a 0%, #0d0f14 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 1.25rem 2rem;
+}
+.header-inner { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+
+.logo { display: flex; align-items: center; gap: 0.6rem; }
+.logo-icon {
+  font-size: 1.6rem;
+  color: var(--accent-2);
+  filter: drop-shadow(0 0 8px var(--accent-glow));
+}
+.logo-text {
+  font-size: 1.35rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #818cf8, #a5b4fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.header-sub { font-size: 0.78rem; color: var(--text-muted); }
+
+/* ── Workspace ─────────────────────────────────────────────────────────────── */
+.workspace {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  grid-template-rows: auto auto;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  flex: 1;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* ── Panel ─────────────────────────────────────────────────────────────────── */
+.panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.4rem;
+}
+.panel-title {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 1.1rem;
+}
+
+/* ── Upload Panel ──────────────────────────────────────────────────────────── */
+.upload-panel { grid-column: 1; grid-row: 1; }
+
+.file-drop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1.8rem 1rem;
+  cursor: pointer;
+  transition: border-color var(--transition), background var(--transition);
+  text-align: center;
+}
+.file-drop:hover {
+  border-color: var(--accent);
+  background: rgba(99,102,241,0.05);
+}
+.file-drop.active { border-color: var(--accent); background: rgba(99,102,241,0.08); }
+
+.drop-icon { font-size: 2rem; color: var(--accent-2); }
+.drop-text { font-size: 0.9rem; font-weight: 500; }
+.drop-hint { font-size: 0.73rem; color: var(--text-muted); }
+
+.file-drop--sm { padding: 0.9rem 1rem; margin-top: 0.5rem; }
+
+/* Second file */
+.second-file { margin-top: 1rem; }
+.section-label { font-size: 0.75rem; color: var(--text-dim); display: block; margin-bottom: 0.3rem; }
+
+/* ── Params ────────────────────────────────────────────────────────────────── */
+.params {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.param-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.param-row label {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+.param-row input {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 0.85rem;
+  padding: 0.3rem 0.6rem;
+  width: 90px;
+  transition: border-color var(--transition);
+}
+.param-row input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* ── Status Message ────────────────────────────────────────────────────────── */
+.status-msg {
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  padding: 0.55rem 0.9rem;
+  border-radius: 6px;
+  background: rgba(239,68,68,0.12);
+  color: var(--danger);
+  border: 1px solid rgba(239,68,68,0.25);
+}
+.status-msg.success {
+  background: rgba(34,197,94,0.1);
+  color: var(--success);
+  border-color: rgba(34,197,94,0.25);
+}
+
+/* ── Operations Panel ──────────────────────────────────────────────────────── */
+.ops-panel {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.ops-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.ops-group {}
+.ops-group-title {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.45rem;
+}
+.op-btn {
+  display: inline-block;
+  margin: 0 0.3rem 0.3rem 0;
+  padding: 0.4rem 0.85rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--text-dim);
+  font-family: var(--font);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition),
+              color var(--transition), box-shadow var(--transition), transform 60ms;
+}
+.op-btn:hover {
+  background: rgba(99,102,241,0.12);
+  border-color: var(--accent);
+  color: var(--accent-2);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+.op-btn:active { transform: scale(0.96); }
+.op-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+.op-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── Preview Panel ─────────────────────────────────────────────────────────── */
+.preview-panel {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.preview-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  flex: 1;
+}
+.preview-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 280px;
+  position: relative;
+}
+.preview-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  align-self: flex-start;
+}
+.preview-img {
+  max-width: 100%;
+  max-height: 420px;
+  border-radius: 6px;
+  object-fit: contain;
+  transition: opacity 0.3s ease;
+}
+.preview-img.faded { opacity: 0.35; }
+.preview-img--sm { max-height: 80px; border-radius: 4px; }
+.preview-empty {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+/* Spinner */
+.spinner {
+  width: 36px; height: 36px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+}
+@keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+/* Histogram */
+.histogram-area {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+#histCanvas {
+  width: 100%;
+  height: 180px;
+  border-radius: 4px;
+}
+
+/* ── Utility ────────────────────────────────────────────────────────────────── */
+.hidden { display: none !important; }
+
+/* ── Footer ────────────────────────────────────────────────────────────────── */
+.footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.73rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .workspace {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+  .preview-panel { grid-column: 1; grid-row: auto; }
+  .preview-grid { grid-template-columns: 1fr; }
+}
