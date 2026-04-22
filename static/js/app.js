@@ -23,18 +23,18 @@ const histCanvas     = document.getElementById('histCanvas');
 // ── Parameter definitions per operation ───────────────────────────────────
 const PARAM_DEFS = {
   binary:            [{ name: 'threshold',     label: 'Threshold (0-255)', type: 'number', default: 128, min: 0, max: 255 }],
-  rotation:          [{ name: 'angle',         label: 'Angle (°)',          type: 'number', default: 45 }],
+  rotation:          [{ name: 'angle',         label: 'Angle (°)',         type: 'number', default: 45 }],
   crop:              [
                        { name: 'x1', label: 'x1', type: 'number', default: 0, min: 0 },
                        { name: 'y1', label: 'y1', type: 'number', default: 0, min: 0 },
                        { name: 'x2', label: 'x2', type: 'number', default: 200, min: 1 },
                        { name: 'y2', label: 'y2', type: 'number', default: 200, min: 1 },
                      ],
-  zoom:              [{ name: 'scale',         label: 'Scale factor',       type: 'number', default: 2.0, step: 0.1, min: 0.1 }],
-  'contrast-multiply': [{ name: 'alpha',       label: 'Alpha (>1 = brighter)', type: 'number', default: 1.5, step: 0.1, min: 0.1 }],
-  'mean-filter':     [{ name: 'size',          label: 'Kernel size (odd)',  type: 'number', default: 3, min: 3, step: 2 }],
-  threshold:         [{ name: 'threshold_val', label: 'Threshold (0-255)', type: 'number', default: 128, min: 0, max: 255 }],
-  'noise-add':       [{ name: 'amount',        label: 'Noise % (0.0-1.0)', type: 'number', default: 0.05, step: 0.01, min: 0, max: 1 }],
+  zoom:              [{ name: 'scale',         label: 'Scale factor',          type: 'number', default: 2.0,  step: 0.1,  min: 0.1 }],
+  'contrast-multiply': [{ name: 'alpha',       label: 'Alpha (>1 = brighter)', type: 'number', default: 1.5,  step: 0.1,  min: 0.1 }],
+  'mean-filter':     [{ name: 'size',          label: 'Kernel size (odd)',     type: 'number', default: 3,    min: 3,     step: 2 }],
+  threshold:         [{ name: 'threshold_val', label: 'Threshold (0-255)',     type: 'number', default: 128,  min: 0,     max: 255 }],
+  'noise-add':       [{ name: 'amount',        label: 'Noise % (0.0-1.0)',     type: 'number', default: 0.05, step: 0.01, min: 0, max: 1 }],
 };
 
 // ── Image preview on file select ───────────────────────────────────────────
