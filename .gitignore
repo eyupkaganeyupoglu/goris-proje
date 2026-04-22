@@ -8,3 +8,4 @@ test.md
 static/temp_results/*
 !static/temp_results/.gitkeep
 eski-proje/
+UML_semasi/
