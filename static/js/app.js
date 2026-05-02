@@ -3,6 +3,7 @@
 // ── State ──────────────────────────────────────────────────────────────────
 let selectedOp = null;           // currently selected operation slug
 let activeBtn  = null;           // DOM button currently active
+let selectedNeedsSecond = false; // whether the current op needs a second image
 
 // ── DOM refs ───────────────────────────────────────────────────────────────
 const fileInput      = document.getElementById('fileInput');
@@ -16,6 +17,7 @@ const resultEmpty    = document.getElementById('resultEmpty');
 const spinner        = document.getElementById('spinner');
 const paramsBox      = document.getElementById('paramsBox');
 const statusMsg      = document.getElementById('statusMsg');
+const applyBtn       = document.getElementById('applyBtn');
 const secondFileWrap = document.getElementById('secondFileWrap');
 const histogramArea  = document.getElementById('histogramArea');
 const histCanvas     = document.getElementById('histCanvas');
@@ -67,6 +69,11 @@ fileDrop.addEventListener('drop', (e) => {
   }
 });
 
+// ── Apply button click ─────────────────────────────────────────────────────
+applyBtn.addEventListener('click', () => {
+  if (selectedOp) runOperation(selectedOp, selectedNeedsSecond);
+});
+
 // ── Operation button clicks ────────────────────────────────────────────────
 document.getElementById('opsGrid').addEventListener('click', (e) => {
   const btn = e.target.closest('.op-btn');
@@ -82,6 +89,7 @@ document.getElementById('opsGrid').addEventListener('click', (e) => {
   selectedOp = op;
 
   // Show/hide second image upload
+  selectedNeedsSecond = needsSecond;
   secondFileWrap.classList.toggle('hidden', !needsSecond);
 
   // Build param inputs
@@ -98,7 +106,11 @@ document.getElementById('opsGrid').addEventListener('click', (e) => {
 function renderParams(op) {
   paramsBox.innerHTML = '';
   const defs = PARAM_DEFS[op];
-  if (!defs) return;
+  
+  if (!defs) {
+    applyBtn.classList.add('hidden');
+    return;
+  }
   defs.forEach(p => {
     const row = document.createElement('div');
     row.className = 'param-row';
@@ -117,6 +129,9 @@ function renderParams(op) {
     row.appendChild(input);
     paramsBox.appendChild(row);
   });
+
+  // Show/hide main Apply button
+  applyBtn.classList.remove('hidden');
 }
 
 // ── Run the operation ──────────────────────────────────────────────────────
