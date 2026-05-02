@@ -259,6 +259,14 @@ async def mean_filter(file: UploadFile = File(...), size: int = Form(3)):
     return JSONResponse({"result_url": _save(result, "mean_filter")})
 
 
+# Sharpening
+@router.post("/process/sharpen")
+async def sharpen(file: UploadFile = File(...)):
+    img = _decode(await file.read())
+    result = apply_sharpening(img)
+    return JSONResponse({"result_url": _save(result, "sharpen")})
+
+
 # Threshold
 @router.post("/process/threshold")
 async def threshold(file: UploadFile = File(...), threshold_val: int = Form(128)):
@@ -297,14 +305,6 @@ async def noise_median(file: UploadFile = File(...)):
     img = _decode(await file.read())
     result = clean_median(img)
     return JSONResponse({"result_url": _save(result, "noise_median")})
-
-
-# Sharpening
-@router.post("/process/sharpen")
-async def sharpen(file: UploadFile = File(...)):
-    img = _decode(await file.read())
-    result = apply_sharpening(img)
-    return JSONResponse({"result_url": _save(result, "sharpen")})
 
 
 # Dilate
