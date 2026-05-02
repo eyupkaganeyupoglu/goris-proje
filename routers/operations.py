@@ -12,7 +12,7 @@ from processing.binary import apply_binary
 from processing.rotation import apply_rotation
 from processing.crop import apply_crop
 from processing.zoom import apply_zoom
-from processing.color_space import apply_yuv_conversion
+from processing.zoom import apply_zoom
 from processing.histogram import compute_histogram, apply_histogram_stretch
 from processing.arithmetic import add_images, divide_images
 from processing.contrast import apply_contrast_multiply, apply_contrast_log
@@ -101,12 +101,62 @@ async def zoom(file: UploadFile = File(...), scale: float = Form(2.0), method: s
     return JSONResponse({"result_url": _save(result, "zoom")})
 
 
-# ── 6. YUV Color Space ───────────────────────────────────────────────────────
-@router.post("/process/yuv")
-async def yuv(file: UploadFile = File(...)):
+# ── 6. Color Space Conversions ───────────────────────────────────────────────
+@router.post("/process/ntsc")
+async def ntsc(file: UploadFile = File(...)):
+    from processing.color_space import apply_ntsc_conversion
     img = _decode(await file.read())
-    result = apply_yuv_conversion(img)
-    return JSONResponse({"result_url": _save(result, "yuv")})
+    result = apply_ntsc_conversion(img)
+    return JSONResponse({"result_url": _save(result, "ntsc")})
+
+@router.post("/process/ycbcr")
+async def ycbcr(file: UploadFile = File(...)):
+    from processing.color_space import apply_ycbcr_conversion
+    img = _decode(await file.read())
+    result = apply_ycbcr_conversion(img)
+    return JSONResponse({"result_url": _save(result, "ycbcr")})
+
+@router.post("/process/cmy")
+async def cmy(file: UploadFile = File(...)):
+    from processing.color_space import apply_cmy_conversion
+    img = _decode(await file.read())
+    result = apply_cmy_conversion(img)
+    return JSONResponse({"result_url": _save(result, "cmy")})
+
+@router.post("/process/cmyk")
+async def cmyk(file: UploadFile = File(...)):
+    from processing.color_space import apply_cmyk_conversion
+    img = _decode(await file.read())
+    result = apply_cmyk_conversion(img)
+    return JSONResponse({"result_url": _save(result, "cmyk")})
+
+@router.post("/process/hsi")
+async def hsi(file: UploadFile = File(...)):
+    from processing.color_space import apply_hsi_conversion
+    img = _decode(await file.read())
+    result = apply_hsi_conversion(img)
+    return JSONResponse({"result_url": _save(result, "hsi")})
+
+@router.post("/process/xyz")
+async def xyz(file: UploadFile = File(...)):
+    from processing.color_space import apply_xyz_conversion
+    img = _decode(await file.read())
+    result = apply_xyz_conversion(img)
+    return JSONResponse({"result_url": _save(result, "xyz")})
+
+@router.post("/process/lab")
+async def lab(file: UploadFile = File(...)):
+    from processing.color_space import apply_lab_conversion
+    img = _decode(await file.read())
+    result = apply_lab_conversion(img)
+    return JSONResponse({"result_url": _save(result, "lab")})
+
+@router.post("/process/luv")
+async def luv(file: UploadFile = File(...)):
+    from processing.color_space import apply_luv_conversion
+    img = _decode(await file.read())
+    result = apply_luv_conversion(img)
+    return JSONResponse({"result_url": _save(result, "luv")})
 
 
 # ── 7. Histogram (returns frequencies as JSON) ───────────────────────────────
