@@ -3,8 +3,9 @@ from processing.grayscale import apply_grayscale
 
 def apply_binary(img: np.ndarray, threshold: int = 128) -> np.ndarray:
     """
-    Convert image to binary (black/white) by applying a threshold to grayscale values.
-    Pixels above threshold -> 255 (white), below or equal -> 0 (black).
+    Threshold: 255 Beyaz, 0 Siyah
+    
+    Threshold'u ayarladıktan sonra APPLY'a basınca çalışacak.
     """
     gray = apply_grayscale(img)
     gray_ch = gray[:, :, 0].astype(np.float32)
