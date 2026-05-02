@@ -221,7 +221,7 @@ async def add(file1: UploadFile = File(...), file2: UploadFile = File(...)):
     return JSONResponse({"result_url": _save(result, "add")})
 
 
-# ── 8b. Divide Images ────────────────────────────────────────────────────────
+# Divide Images
 @router.post("/process/divide")
 async def divide(file1: UploadFile = File(...), file2: UploadFile = File(...)):
     img1 = _decode(await file1.read())
@@ -235,7 +235,7 @@ async def divide(file1: UploadFile = File(...), file2: UploadFile = File(...)):
     return JSONResponse({"result_url": _save(result, "divide")})
 
 
-# ── 9a. Contrast Multiply ────────────────────────────────────────────────────
+# Contrast Multiply
 @router.post("/process/contrast-multiply")
 async def contrast_multiply(file: UploadFile = File(...), alpha: float = Form(1.5)):
     img = _decode(await file.read())
@@ -243,7 +243,7 @@ async def contrast_multiply(file: UploadFile = File(...), alpha: float = Form(1.
     return JSONResponse({"result_url": _save(result, "contrast_mul")})
 
 
-# ── 9b. Contrast Log ─────────────────────────────────────────────────────────
+# Contrast Log
 @router.post("/process/contrast-log")
 async def contrast_log(file: UploadFile = File(...)):
     img = _decode(await file.read())
@@ -251,7 +251,7 @@ async def contrast_log(file: UploadFile = File(...)):
     return JSONResponse({"result_url": _save(result, "contrast_log")})
 
 
-# ── 10. Mean Filter ──────────────────────────────────────────────────────────
+# Mean Filter
 @router.post("/process/mean-filter")
 async def mean_filter(file: UploadFile = File(...), size: int = Form(3)):
     img = _decode(await file.read())
@@ -259,7 +259,7 @@ async def mean_filter(file: UploadFile = File(...), size: int = Form(3)):
     return JSONResponse({"result_url": _save(result, "mean_filter")})
 
 
-# ── 11. Threshold ────────────────────────────────────────────────────────────
+# Threshold
 @router.post("/process/threshold")
 async def threshold(file: UploadFile = File(...), threshold_val: int = Form(128)):
     img = _decode(await file.read())
@@ -267,7 +267,7 @@ async def threshold(file: UploadFile = File(...), threshold_val: int = Form(128)
     return JSONResponse({"result_url": _save(result, "threshold")})
 
 
-# ── 12. Edge Detection (Prewitt) ─────────────────────────────────────────────
+# Edge Detection (Prewitt)
 @router.post("/process/edge")
 async def edge(file: UploadFile = File(...)):
     img = _decode(await file.read())
@@ -275,7 +275,7 @@ async def edge(file: UploadFile = File(...)):
     return JSONResponse({"result_url": _save(result, "edge")})
 
 
-# ── 13a. Add Noise ────────────────────────────────────────────────────────────
+# Add Noise
 @router.post("/process/noise-add")
 async def noise_add(file: UploadFile = File(...), amount: float = Form(0.05)):
     img = _decode(await file.read())
@@ -283,7 +283,7 @@ async def noise_add(file: UploadFile = File(...), amount: float = Form(0.05)):
     return JSONResponse({"result_url": _save(result, "noise_add")})
 
 
-# ── 13b. Clean Mean ───────────────────────────────────────────────────────────
+# Clean Mean
 @router.post("/process/noise-mean")
 async def noise_mean(file: UploadFile = File(...)):
     img = _decode(await file.read())
@@ -291,7 +291,7 @@ async def noise_mean(file: UploadFile = File(...)):
     return JSONResponse({"result_url": _save(result, "noise_mean")})
 
 
-# ── 13c. Clean Median ─────────────────────────────────────────────────────────
+# Clean Median
 @router.post("/process/noise-median")
 async def noise_median(file: UploadFile = File(...)):
     img = _decode(await file.read())
@@ -299,7 +299,7 @@ async def noise_median(file: UploadFile = File(...)):
     return JSONResponse({"result_url": _save(result, "noise_median")})
 
 
-# ── 14. Sharpening ───────────────────────────────────────────────────────────
+# Sharpening
 @router.post("/process/sharpen")
 async def sharpen(file: UploadFile = File(...)):
     img = _decode(await file.read())
@@ -307,7 +307,7 @@ async def sharpen(file: UploadFile = File(...)):
     return JSONResponse({"result_url": _save(result, "sharpen")})
 
 
-# ── 15a. Dilate ───────────────────────────────────────────────────────────────
+# Dilate
 @router.post("/process/dilate")
 async def dilate(file: UploadFile = File(...)):
     img = _decode(await file.read())
@@ -315,7 +315,7 @@ async def dilate(file: UploadFile = File(...)):
     return JSONResponse({"result_url": _save(result, "dilate")})
 
 
-# ── 15b. Erode ────────────────────────────────────────────────────────────────
+# Erode
 @router.post("/process/erode")
 async def erode(file: UploadFile = File(...)):
     img = _decode(await file.read())
@@ -323,7 +323,7 @@ async def erode(file: UploadFile = File(...)):
     return JSONResponse({"result_url": _save(result, "erode")})
 
 
-# ── 15c. Opening ─────────────────────────────────────────────────────────────
+# Opening
 @router.post("/process/opening")
 async def opening(file: UploadFile = File(...)):
     img = _decode(await file.read())
@@ -331,7 +331,7 @@ async def opening(file: UploadFile = File(...)):
     return JSONResponse({"result_url": _save(result, "opening")})
 
 
-# ── 15d. Closing ─────────────────────────────────────────────────────────────
+# Closing
 @router.post("/process/closing")
 async def closing(file: UploadFile = File(...)):
     img = _decode(await file.read())

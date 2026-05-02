@@ -4,8 +4,8 @@ import math
 
 def apply_contrast_multiply(img: np.ndarray, alpha: float = 1.5) -> np.ndarray:
     """
-    Multiply each pixel by alpha to enhance contrast.
-    g(x,y) = alpha * f(x,y). Values clipped to 0-255.
+    Kontrastı artırmak için her pikseli alfa ile çarpın.
+    g(x,y) = alfa * f(x,y). Değerler 0-255 aralığına kırpılır.
     """
     result = img.astype(np.float32) * alpha
     return np.clip(result, 0, 255).astype(np.uint8)
@@ -13,9 +13,9 @@ def apply_contrast_multiply(img: np.ndarray, alpha: float = 1.5) -> np.ndarray:
 
 def apply_contrast_log(img: np.ndarray) -> np.ndarray:
     """
-    Apply logarithmic transformation to enhance dark regions.
+    Karanlık bölgeleri iyileştirmek için logaritmik dönüşüm uygulayın.
     Q(i,j) = c * log(1 + |P(i,j)|)
-    c = 255 / log(1 + max_pixel_value)
+    c = 255 / log(1 + maksimum_piksel_değeri)
     """
     img_f = img.astype(np.float32)
     max_val = float(img_f.max())
