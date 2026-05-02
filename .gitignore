@@ -1,6 +1,3 @@
-proje-detaylari.md
-project-details.md
-agent_generation_instructions.md
 venv/
 __pycache__
 .agent/
@@ -8,4 +5,4 @@ test.md
 static/temp_results/*
 !static/temp_results/.gitkeep
 eski-proje/
-UML_semasi/
+image.jpg
