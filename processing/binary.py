@@ -1,7 +1,6 @@
 import numpy as np
 from processing.grayscale import apply_grayscale
 
-
 def apply_binary(img: np.ndarray, threshold: int = 128) -> np.ndarray:
     """
     Convert image to binary (black/white) by applying a threshold to grayscale values.
