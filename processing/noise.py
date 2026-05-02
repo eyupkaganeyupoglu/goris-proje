@@ -1,11 +1,6 @@
 import numpy as np
 
-
 def add_salt_pepper(img: np.ndarray, amount: float = 0.05) -> np.ndarray:
-    """
-    Add salt & pepper noise to image.
-    'amount' fraction of pixels are randomly set to 0 (pepper) or 255 (salt).
-    """
     result = img.copy()
     h, w = img.shape[:2]
     total = h * w
@@ -13,30 +8,21 @@ def add_salt_pepper(img: np.ndarray, amount: float = 0.05) -> np.ndarray:
 
     rng = np.random.default_rng()
 
-    # Salt (255)
     coords_salt = rng.integers(0, [h, w], size=(n_noise // 2, 2))
     for y, x in coords_salt:
         result[y, x] = 255
 
-    # Pepper (0)
     coords_pepper = rng.integers(0, [h, w], size=(n_noise // 2, 2))
     for y, x in coords_pepper:
         result[y, x] = 0
 
     return result
 
-
 def clean_mean(img: np.ndarray) -> np.ndarray:
-    """Clean noise using mean (average) filter — imports from convolution module."""
     from processing.convolution import apply_mean_filter
     return apply_mean_filter(img, size=3)
 
-
 def clean_median(img: np.ndarray, size: int = 3) -> np.ndarray:
-    """
-    Clean noise using median filter. Manually sort a size x size window
-    and assign the middle value to the center pixel.
-    """
     pad = size // 2
     result = np.zeros_like(img)
 
