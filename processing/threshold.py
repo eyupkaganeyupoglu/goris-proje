@@ -1,12 +1,7 @@
 import numpy as np
 from processing.grayscale import apply_grayscale
 
-
 def apply_threshold(img: np.ndarray, threshold: int = 128) -> np.ndarray:
-    """
-    Single thresholding: scan each pixel of the grayscale image.
-    f(x,y) > threshold -> 255 (white), otherwise -> 0 (black).
-    """
     gray = apply_grayscale(img)
     channel = gray[:, :, 0]
     h, w = channel.shape

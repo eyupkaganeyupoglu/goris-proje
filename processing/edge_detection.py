@@ -2,8 +2,6 @@ import numpy as np
 from processing.convolution import convolve
 from processing.grayscale import apply_grayscale
 
-
-# Prewitt kernels
 GX = np.array([[-1, 0, 1],
                [-1, 0, 1],
                [-1, 0, 1]], dtype=np.float32)
@@ -12,13 +10,7 @@ GY = np.array([[-1, -1, -1],
                [ 0,  0,  0],
                [ 1,  1,  1]], dtype=np.float32)
 
-
 def apply_edge_prewitt(img: np.ndarray) -> np.ndarray:
-    """
-    Prewitt edge detection using manual convolution with Gx and Gy kernels.
-    G = |Gx| + |Gy|  (sum of absolute values)
-    Applied on grayscale version of the image.
-    """
     gray = apply_grayscale(img)
     channel = gray[:, :, 0].astype(np.float32)
 
