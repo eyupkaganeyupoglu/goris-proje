@@ -15,7 +15,7 @@ from processing.zoom import apply_zoom
 from processing.zoom import apply_zoom
 from processing.histogram import compute_histogram, apply_histogram_stretch, apply_histogram_equalization, apply_histogram_expand
 from processing.arithmetic import add_images, divide_images
-from processing.contrast import apply_contrast_multiply, apply_contrast_log
+from processing.contrast import apply_brightness_multiply, apply_contrast_adjust
 from processing.convolution import apply_mean_filter
 from processing.threshold import apply_threshold
 from processing.edge_detection import apply_edge_prewitt
@@ -235,20 +235,20 @@ async def divide(file1: UploadFile = File(...), file2: UploadFile = File(...)):
     return JSONResponse({"result_url": _save(result, "divide")})
 
 
-# Contrast Multiply
-@router.post("/process/contrast-multiply")
-async def contrast_multiply(file: UploadFile = File(...), alpha: float = Form(1.5)):
+# Brightness Multiply
+@router.post("/process/brightness-multiply")
+async def brightness_multiply(file: UploadFile = File(...), alpha: float = Form(1.5)):
     img = _decode(await file.read())
-    result = apply_contrast_multiply(img, alpha=alpha)
-    return JSONResponse({"result_url": _save(result, "contrast_mul")})
+    result = apply_brightness_multiply(img, alpha=alpha)
+    return JSONResponse({"result_url": _save(result, "brightness_mul")})
 
 
-# Contrast Log
+# Contrast Adjust
 @router.post("/process/contrast-log")
-async def contrast_log(file: UploadFile = File(...)):
+async def contrast_adjust(file: UploadFile = File(...), factor: float = Form(1.5)):
     img = _decode(await file.read())
-    result = apply_contrast_log(img)
-    return JSONResponse({"result_url": _save(result, "contrast_log")})
+    result = apply_contrast_adjust(img, factor=factor)
+    return JSONResponse({"result_url": _save(result, "contrast_adjust")})
 
 
 # Mean Filter
