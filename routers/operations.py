@@ -20,7 +20,7 @@ from processing.convolution import apply_mean_filter
 from processing.threshold import apply_threshold
 from processing.edge_detection import apply_edge_prewitt
 from processing.noise import add_salt_pepper, clean_mean, clean_median
-from processing.sharpening import apply_sharpening
+from processing.sharpening import apply_unsharp
 from processing.morphology import apply_dilate, apply_erode, apply_opening, apply_closing
 
 router = APIRouter()
@@ -259,12 +259,12 @@ async def mean_filter(file: UploadFile = File(...), size: int = Form(3)):
     return JSONResponse({"result_url": _save(result, "mean_filter")})
 
 
-# Sharpening
-@router.post("/process/sharpen")
-async def sharpen(file: UploadFile = File(...)):
+# Unsharp
+@router.post("/process/unsharp")
+async def unsharp(file: UploadFile = File(...)):
     img = _decode(await file.read())
-    result = apply_sharpening(img)
-    return JSONResponse({"result_url": _save(result, "sharpen")})
+    result = apply_unsharp(img)
+    return JSONResponse({"result_url": _save(result, "unsharp")})
 
 
 # Threshold
