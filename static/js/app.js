@@ -117,8 +117,12 @@ document.getElementById('opsGrid').addEventListener('click', (e) => {
   // Clear status
   hideStatus();
 
-  // Auto-run operation
-  runOperation(op, needsSecond);
+  // Auto-run only for single-image operations
+  if (needsSecond) {
+    applyBtn.classList.remove('hidden');
+  } else {
+    runOperation(op, needsSecond);
+  }
 });
 
 // ── Render parameter inputs ────────────────────────────────────────────────
