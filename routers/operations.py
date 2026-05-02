@@ -80,20 +80,17 @@ async def crop(
     if x1 >= x2 or y1 >= y2:
         return JSONResponse(
             status_code=400,
-            content={"detail": "Hata: X1 ve Y1 değerleri sırasıyla X2 ve Y2 değerlerinden küçük olmalıdır."}
+            content={"detail": "X1 ve Y1 değerleri sırasıyla X2 ve Y2 değerlerinden küçük olmalıdır."}
         )
 
-    warning_msg = None
     if x1 < 0 or y1 < 0 or x2 > w or y2 > h:
-        warning_msg = f"Uyarı: Girdiğiniz değerler resim sınırlarını (Genişlik: {w}, Yükseklik: {h}) aştığı için otomatik olarak sınırlandırıldı."
+        return JSONResponse(
+            status_code=400,
+            content={"detail": f"Koordinatlar resim sınırları (Genişlik: {w}, Yükseklik: {h}) içinde olmalıdır."}
+        )
 
     result = apply_crop(img, x1=x1, y1=y1, x2=x2, y2=y2)
-    
-    response_data = {"result_url": _save(result, "crop")}
-    if warning_msg:
-        response_data["warning"] = warning_msg
-        
-    return JSONResponse(response_data)
+    return JSONResponse({"result_url": _save(result, "crop")})
 
 
 # ── 5. Zoom ──────────────────────────────────────────────────────────────────

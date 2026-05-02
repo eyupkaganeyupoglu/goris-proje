@@ -151,6 +151,7 @@ function renderParams(op) {
 
 // ── Run the operation ──────────────────────────────────────────────────────
 async function runOperation(op, needsSecond = false) {
+  hideStatus();
   if (!fileInput.files.length) {
     showStatus('Please select an image first.', 'error');
     return;
@@ -266,7 +267,11 @@ function showStatus(msg, type = 'error') {
   statusMsg.textContent = msg;
   statusMsg.className = 'status-msg' + (type === 'error' ? '' : ' ' + type);
   statusMsg.classList.remove('hidden');
-  if (type === 'success' || type === 'warning') setTimeout(hideStatus, 4000);
+  
+  // Sadece başarı mesajları otomatik kaybolur. Hata ve uyarılar kalıcıdır.
+  if (type === 'success') {
+    setTimeout(hideStatus, 4000);
+  }
 }
 
 function hideStatus() {
