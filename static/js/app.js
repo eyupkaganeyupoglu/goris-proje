@@ -21,6 +21,10 @@ const applyBtn       = document.getElementById('applyBtn');
 const secondFileWrap = document.getElementById('secondFileWrap');
 const histogramArea  = document.getElementById('histogramArea');
 const histCanvas     = document.getElementById('histCanvas');
+const origHistArea   = document.getElementById('origHistArea');
+const origHistCanvas = document.getElementById('origHistCanvas');
+const procHistArea   = document.getElementById('procHistArea');
+const procHistCanvas = document.getElementById('procHistCanvas');
 
 // ── Parameter definitions per operation ───────────────────────────────────
 const PARAM_DEFS = {
@@ -44,6 +48,10 @@ const PARAM_DEFS = {
   'mean-filter':     [{ name: 'size',          label: 'Kernel size (odd)',     type: 'number', default: 3,    min: 3,     step: 2 }],
   threshold:         [{ name: 'threshold_val', label: 'Threshold (0-255)',     type: 'number', default: 128,  min: 0,     max: 255 }],
   'noise-add':       [{ name: 'amount',        label: 'Noise % (0.0-1.0)',     type: 'number', default: 0.05, step: 0.01, min: 0, max: 1 }],
+  'histogram-expand': [
+                       { name: 'a', label: 'Alt Sınır (0.0-1.0)',  type: 'number', default: 0.3,  step: 0.05, min: 0, max: 1 },
+                       { name: 'b', label: 'Üst Sınır (0.0-1.0)',  type: 'number', default: 0.7,  step: 0.05, min: 0, max: 1 },
+                     ],
 };
 
 // ── Image preview on file select ───────────────────────────────────────────
@@ -219,6 +227,8 @@ async function runOperation(op, needsSecond = false) {
   // UI: loading state
   setLoading(true);
   histogramArea.classList.add('hidden');
+  origHistArea.classList.add('hidden');
+  procHistArea.classList.add('hidden');
 
   try {
     const res = await fetch(`/process/${op}`, { method: 'POST', body: formData });
@@ -242,6 +252,14 @@ async function runOperation(op, needsSecond = false) {
       drawHistogram(data.histogram);
       histogramArea.classList.remove('hidden');
       resultEmpty.classList.add('hidden');
+    }
+
+    // Histogram Germe, Genişletme veya Eşitleme sonrası çift histogram görüntüle
+    if (data.original_histogram && data.processed_histogram) {
+      drawInlineHistogram(origHistCanvas, data.original_histogram, '#818cf8');
+      origHistArea.classList.remove('hidden');
+      drawInlineHistogram(procHistCanvas, data.processed_histogram, '#22c55e');
+      procHistArea.classList.remove('hidden');
     }
 
     if (data.warning) {
@@ -276,6 +294,44 @@ function drawHistogram(hist) {
     ctx.fillStyle = `rgb(${shade},${Math.round(shade * 0.7)},255)`;
     ctx.fillRect(i * barW, H - barH, barW, barH);
   }
+}
+
+// ── Draw inline histogram (under preview boxes) ─────────────────────────────
+function drawInlineHistogram(canvas, hist, accentColor) {
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width;
+  const H = canvas.height;
+  const maxVal = Math.max(...hist);
+  ctx.clearRect(0, 0, W, H);
+
+  // Koyu arka plan
+  ctx.fillStyle = '#111420';
+  ctx.fillRect(0, 0, W, H);
+
+  // Yatay referans çizgileri
+  ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+  ctx.lineWidth = 1;
+  for (let y = 0; y < H; y += Math.round(H / 4)) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(W, y);
+    ctx.stroke();
+  }
+
+  if (maxVal === 0) return;
+
+  const barW = W / 256;
+  const padding = 6;
+
+  for (let i = 0; i < 256; i++) {
+    const barH = (hist[i] / maxVal) * (H - padding * 2);
+    // Parlaklık ve aksana göre renk gradyanı
+    const t = i / 255;
+    ctx.fillStyle = accentColor;
+    ctx.globalAlpha = 0.35 + t * 0.65;
+    ctx.fillRect(i * barW, H - padding - barH, Math.max(barW - 0.5, 1), barH);
+  }
+  ctx.globalAlpha = 1.0;
 }
 
 // ── UI helpers ─────────────────────────────────────────────────────────────

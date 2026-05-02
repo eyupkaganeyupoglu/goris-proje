@@ -1,10 +1,10 @@
 venv/
 __pycache__
-.agent
+.agent/
 test.md
 static/temp_results/*
 !static/temp_results/.gitkeep
 eski-proje/
-image.jpg
 pdfler/
 todo.png
+images/

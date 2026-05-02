@@ -82,8 +82,10 @@
 
         <div class="ops-group">
           <h3 class="ops-group-title">Histogram</h3>
-          <button id="btn-histogram-stretch" class="op-btn" data-op="histogram-stretch">Hist. Stretch</button>
-          <button id="btn-histogram"         class="op-btn" data-op="histogram">Show Histogram</button>
+          <button id="btn-histogram-stretch"  class="op-btn" data-op="histogram-stretch">Hist. Germe</button>
+          <button id="btn-histogram-equalize" class="op-btn" data-op="histogram-equalize">Hist. Eşitleme</button>
+          <button id="btn-histogram-expand"   class="op-btn" data-op="histogram-expand" data-params="a,b">Hist. Genişletme</button>
+          <button id="btn-histogram"          class="op-btn" data-op="histogram">Histogram Göster</button>
         </div>
 
         <div class="ops-group">
@@ -132,16 +134,24 @@
           <p class="preview-label">Original</p>
           <img id="previewImg" class="preview-img" src="" alt="Original image" />
           <p class="preview-empty" id="origEmpty">No image selected</p>
+          <div id="origHistArea" class="hist-inline hidden">
+            <p class="hist-inline-label">Histogram</p>
+            <canvas id="origHistCanvas" width="512" height="150"></canvas>
+          </div>
         </div>
         <div class="preview-box">
           <p class="preview-label">Processed</p>
           <div class="spinner hidden" id="spinner"></div>
           <img id="resultImg" class="preview-img" src="" alt="Result image" />
           <p class="preview-empty" id="resultEmpty">Run an operation</p>
+          <div id="procHistArea" class="hist-inline hidden">
+            <p class="hist-inline-label">Histogram</p>
+            <canvas id="procHistCanvas" width="512" height="150"></canvas>
+          </div>
         </div>
       </div>
 
-      <!-- Histogram chart area -->
+      <!-- Histogram chart area (for standalone "Histogram Göster" operation) -->
       <div id="histogramArea" class="histogram-area hidden">
         <p class="preview-label">Histogram (intensity frequency)</p>
         <canvas id="histCanvas" width="512" height="180"></canvas>

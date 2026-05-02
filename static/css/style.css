@@ -342,7 +342,7 @@ body {
 }
 @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
 
-/* Histogram */
+/* Histogram (standalone "Histogram Göster") */
 .histogram-area {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -355,6 +355,34 @@ body {
 #histCanvas {
   width: 100%;
   height: 180px;
+  border-radius: 4px;
+}
+
+/* Inline histogram (under Original / Processed preview boxes) */
+.hist-inline {
+  width: 100%;
+  margin-top: 0.6rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  animation: histFadeIn 0.4s ease;
+}
+@keyframes histFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hist-inline-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.hist-inline canvas {
+  width: 100%;
+  height: 130px;
   border-radius: 4px;
 }
 

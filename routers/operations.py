@@ -13,7 +13,8 @@ from processing.rotation import apply_rotation
 from processing.crop import apply_crop
 from processing.zoom import apply_zoom
 from processing.zoom import apply_zoom
-from processing.histogram import compute_histogram, apply_histogram_stretch
+from processing.histogram import compute_histogram, apply_histogram_stretch, apply_histogram_equalization, apply_histogram_expand
+
 from processing.arithmetic import add_images, divide_images
 from processing.contrast import apply_contrast_multiply, apply_contrast_log
 from processing.convolution import apply_mean_filter
@@ -167,12 +168,50 @@ async def histogram(file: UploadFile = File(...)):
     return JSONResponse({"histogram": hist})
 
 
-# ── 7b. Histogram Stretch ────────────────────────────────────────────────────
+# ── 7b. Histogram Stretch (Germe) ────────────────────────────────────────────
 @router.post("/process/histogram-stretch")
 async def histogram_stretch(file: UploadFile = File(...)):
     img = _decode(await file.read())
+    original_hist = compute_histogram(img)
     result = apply_histogram_stretch(img)
-    return JSONResponse({"result_url": _save(result, "hist_stretch")})
+    processed_hist = compute_histogram(result)
+    return JSONResponse({
+        "result_url": _save(result, "hist_stretch"),
+        "original_histogram": original_hist,
+        "processed_histogram": processed_hist,
+    })
+
+
+# ── 7c. Histogram Equalization (Eşitleme) ────────────────────────────────────
+@router.post("/process/histogram-equalize")
+async def histogram_equalize(file: UploadFile = File(...)):
+    img = _decode(await file.read())
+    original_hist = compute_histogram(img)
+    result = apply_histogram_equalization(img)
+    processed_hist = compute_histogram(result)
+    return JSONResponse({
+        "result_url": _save(result, "hist_equalize"),
+        "original_histogram": original_hist,
+        "processed_histogram": processed_hist,
+    })
+
+
+# ── 7d. Histogram Expand (Genişletme) ────────────────────────────────────────
+@router.post("/process/histogram-expand")
+async def histogram_expand(
+    file: UploadFile = File(...),
+    a: float = Form(0.3),
+    b: float = Form(0.7),
+):
+    img = _decode(await file.read())
+    original_hist = compute_histogram(img)
+    result = apply_histogram_expand(img, a=a, b=b)
+    processed_hist = compute_histogram(result)
+    return JSONResponse({
+        "result_url": _save(result, "hist_expand"),
+        "original_histogram": original_hist,
+        "processed_histogram": processed_hist,
+    })
 
 
 # ── 8a. Add Images ───────────────────────────────────────────────────────────
