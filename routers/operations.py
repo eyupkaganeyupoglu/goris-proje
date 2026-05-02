@@ -160,12 +160,6 @@ async def luv(file: UploadFile = File(...)):
     return JSONResponse({"result_url": _save(result, "luv")})
 
 
-# ── 7. Histogram (returns frequencies as JSON) ───────────────────────────────
-@router.post("/process/histogram")
-async def histogram(file: UploadFile = File(...)):
-    img = _decode(await file.read())
-    hist = compute_histogram(img)
-    return JSONResponse({"histogram": hist})
 
 
 # ── 7b. Histogram Stretch (Germe) ────────────────────────────────────────────

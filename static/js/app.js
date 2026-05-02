@@ -19,8 +19,6 @@ const paramsBox      = document.getElementById('paramsBox');
 const statusMsg      = document.getElementById('statusMsg');
 const applyBtn       = document.getElementById('applyBtn');
 const secondFileWrap = document.getElementById('secondFileWrap');
-const histogramArea  = document.getElementById('histogramArea');
-const histCanvas     = document.getElementById('histCanvas');
 const origHistArea   = document.getElementById('origHistArea');
 const origHistCanvas = document.getElementById('origHistCanvas');
 const procHistArea   = document.getElementById('procHistArea');
@@ -226,7 +224,6 @@ async function runOperation(op, needsSecond = false) {
 
   // UI: loading state
   setLoading(true);
-  histogramArea.classList.add('hidden');
   origHistArea.classList.add('hidden');
   procHistArea.classList.add('hidden');
 
@@ -248,10 +245,6 @@ async function runOperation(op, needsSecond = false) {
       resultImg.src = 'data:image/png;base64,' + data.result_b64;
       resultImg.classList.remove('hidden');
       resultEmpty.classList.add('hidden');
-    } else if (data.histogram) {
-      drawHistogram(data.histogram);
-      histogramArea.classList.remove('hidden');
-      resultEmpty.classList.add('hidden');
     }
 
     // Histogram Germe, Genişletme veya Eşitleme sonrası çift histogram görüntüle
@@ -272,27 +265,6 @@ async function runOperation(op, needsSecond = false) {
     showStatus('Error: ' + err.message, 'error');
   } finally {
     setLoading(false);
-  }
-}
-
-// ── Draw histogram on canvas ───────────────────────────────────────────────
-function drawHistogram(hist) {
-  const ctx = histCanvas.getContext('2d');
-  const W = histCanvas.width;
-  const H = histCanvas.height;
-  const maxVal = Math.max(...hist);
-  ctx.clearRect(0, 0, W, H);
-
-  // Background
-  ctx.fillStyle = '#1a1e2b';
-  ctx.fillRect(0, 0, W, H);
-
-  const barW = W / 256;
-  for (let i = 0; i < 256; i++) {
-    const barH = (hist[i] / maxVal) * (H - 10);
-    const shade = Math.round((i / 255) * 200 + 55);
-    ctx.fillStyle = `rgb(${shade},${Math.round(shade * 0.7)},255)`;
-    ctx.fillRect(i * barW, H - barH, barW, barH);
   }
 }
 

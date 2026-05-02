@@ -342,22 +342,6 @@ body {
 }
 @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
 
-/* Histogram (standalone "Histogram Göster") */
-.histogram-area {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-}
-#histCanvas {
-  width: 100%;
-  height: 180px;
-  border-radius: 4px;
-}
-
 /* Inline histogram (under Original / Processed preview boxes) */
 .hist-inline {
   width: 100%;
