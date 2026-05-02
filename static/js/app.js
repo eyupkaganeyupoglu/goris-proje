@@ -56,6 +56,12 @@ fileInput2.addEventListener('change', (e) => {
   previewImg2.classList.remove('hidden');
 });
 
+previewImg.addEventListener('load', () => {
+  if (selectedOp === 'crop') {
+    renderParams('crop');
+  }
+});
+
 // ── Drag & drop ────────────────────────────────────────────────────────────
 fileDrop.addEventListener('dragover', (e) => { e.preventDefault(); fileDrop.classList.add('active'); });
 fileDrop.addEventListener('dragleave', () => fileDrop.classList.remove('active'));
@@ -125,6 +131,15 @@ function renderParams(op) {
     if (p.min  !== undefined) input.min  = p.min;
     if (p.max  !== undefined) input.max  = p.max;
     if (p.step !== undefined) input.step = p.step;
+    
+    // Dynamic max for crop based on current image
+    if (op === 'crop' && previewImg && previewImg.naturalWidth) {
+      if (p.name === 'x1' || p.name === 'x2') input.max = previewImg.naturalWidth;
+      if (p.name === 'y1' || p.name === 'y2') input.max = previewImg.naturalHeight;
+      if (p.name === 'x2' && p.default === 200 && previewImg.naturalWidth < 200) input.value = previewImg.naturalWidth;
+      if (p.name === 'y2' && p.default === 200 && previewImg.naturalHeight < 200) input.value = previewImg.naturalHeight;
+    }
+
     row.appendChild(label);
     row.appendChild(input);
     paramsBox.appendChild(row);
@@ -161,6 +176,23 @@ async function runOperation(op, needsSecond = false) {
     if (el) formData.append(p.name, el.value);
   });
 
+  // Client-side crop validation before sending request
+  if (op === 'crop') {
+    const x1 = parseInt(formData.get('x1'), 10);
+    const x2 = parseInt(formData.get('x2'), 10);
+    const y1 = parseInt(formData.get('y1'), 10);
+    const y2 = parseInt(formData.get('y2'), 10);
+
+    if (x1 >= x2) {
+      showStatus('X1 değeri X2 değerinden küçük olmalıdır.', 'error');
+      return;
+    }
+    if (y1 >= y2) {
+      showStatus('Y1 değeri Y2 değerinden küçük olmalıdır.', 'error');
+      return;
+    }
+  }
+
   // UI: loading state
   setLoading(true);
   histogramArea.classList.add('hidden');
@@ -189,7 +221,11 @@ async function runOperation(op, needsSecond = false) {
       resultEmpty.classList.add('hidden');
     }
 
-    showStatus('Done ✓', 'success');
+    if (data.warning) {
+      showStatus(data.warning, 'warning');
+    } else {
+      showStatus('İşlem Başarılı ✓', 'success');
+    }
 
   } catch (err) {
     showStatus('Error: ' + err.message, 'error');
@@ -228,9 +264,9 @@ function setLoading(on) {
 
 function showStatus(msg, type = 'error') {
   statusMsg.textContent = msg;
-  statusMsg.className = 'status-msg' + (type === 'success' ? ' success' : '');
+  statusMsg.className = 'status-msg' + (type === 'error' ? '' : ' ' + type);
   statusMsg.classList.remove('hidden');
-  if (type === 'success') setTimeout(hideStatus, 3000);
+  if (type === 'success' || type === 'warning') setTimeout(hideStatus, 4000);
 }
 
 function hideStatus() {

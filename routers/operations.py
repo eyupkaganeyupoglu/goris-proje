@@ -75,8 +75,25 @@ async def crop(
     x2: int = Form(100), y2: int = Form(100)
 ):
     img = _decode(await file.read())
+    h, w = img.shape[:2]
+
+    if x1 >= x2 or y1 >= y2:
+        return JSONResponse(
+            status_code=400,
+            content={"detail": "Hata: X1 ve Y1 değerleri sırasıyla X2 ve Y2 değerlerinden küçük olmalıdır."}
+        )
+
+    warning_msg = None
+    if x1 < 0 or y1 < 0 or x2 > w or y2 > h:
+        warning_msg = f"Uyarı: Girdiğiniz değerler resim sınırlarını (Genişlik: {w}, Yükseklik: {h}) aştığı için otomatik olarak sınırlandırıldı."
+
     result = apply_crop(img, x1=x1, y1=y1, x2=x2, y2=y2)
-    return JSONResponse({"result_url": _save(result, "crop")})
+    
+    response_data = {"result_url": _save(result, "crop")}
+    if warning_msg:
+        response_data["warning"] = warning_msg
+        
+    return JSONResponse(response_data)
 
 
 # ── 5. Zoom ──────────────────────────────────────────────────────────────────
