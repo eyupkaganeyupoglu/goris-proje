@@ -95,9 +95,9 @@ async def crop(
 
 # ── 5. Zoom ──────────────────────────────────────────────────────────────────
 @router.post("/process/zoom")
-async def zoom(file: UploadFile = File(...), scale: float = Form(2.0)):
+async def zoom(file: UploadFile = File(...), scale: float = Form(2.0), method: str = Form("nearest")):
     img = _decode(await file.read())
-    result = apply_zoom(img, scale=scale)
+    result = apply_zoom(img, scale=scale, method=method)
     return JSONResponse({"result_url": _save(result, "zoom")})
 
 

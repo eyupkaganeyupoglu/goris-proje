@@ -32,7 +32,14 @@ const PARAM_DEFS = {
                        { name: 'x2', label: 'x2', type: 'number', default: 200, min: 1 },
                        { name: 'y2', label: 'y2', type: 'number', default: 200, min: 1 },
                      ],
-  zoom:              [{ name: 'scale',         label: 'Scale factor',          type: 'number', default: 2.0,  step: 0.1,  min: 0.1 }],
+  zoom:              [
+                       { name: 'scale',  label: 'Scale factor', type: 'number', default: 2.0, step: 0.1, min: 0.1 },
+                       { name: 'method', label: 'Yöntem',       type: 'select', default: 'nearest', options: [
+                         { value: 'nearest',  text: 'Nearest (En Yakın Komşu)' },
+                         { value: 'bilinear', text: 'Bilinear (Çift Doğrusal)' },
+                         { value: 'bicubic',  text: 'Bicubic (Bikübik)' },
+                       ]},
+                     ],
   'contrast-multiply': [{ name: 'alpha',       label: 'Alpha (>1 = brighter)', type: 'number', default: 1.5,  step: 0.1,  min: 0.1 }],
   'mean-filter':     [{ name: 'size',          label: 'Kernel size (odd)',     type: 'number', default: 3,    min: 3,     step: 2 }],
   threshold:         [{ name: 'threshold_val', label: 'Threshold (0-255)',     type: 'number', default: 128,  min: 0,     max: 255 }],
@@ -123,25 +130,40 @@ function renderParams(op) {
     const label = document.createElement('label');
     label.setAttribute('for', `param-${p.name}`);
     label.textContent = p.label;
-    const input = document.createElement('input');
-    input.type  = p.type || 'number';
-    input.id    = `param-${p.name}`;
-    input.name  = p.name;
-    input.value = p.default;
-    if (p.min  !== undefined) input.min  = p.min;
-    if (p.max  !== undefined) input.max  = p.max;
-    if (p.step !== undefined) input.step = p.step;
-    
-    // Dynamic max for crop based on current image
-    if (op === 'crop' && previewImg && previewImg.naturalWidth) {
-      if (p.name === 'x1' || p.name === 'x2') input.max = previewImg.naturalWidth;
-      if (p.name === 'y1' || p.name === 'y2') input.max = previewImg.naturalHeight;
-      if (p.name === 'x2' && p.default === 200 && previewImg.naturalWidth < 200) input.value = previewImg.naturalWidth;
-      if (p.name === 'y2' && p.default === 200 && previewImg.naturalHeight < 200) input.value = previewImg.naturalHeight;
+
+    let control;
+    if (p.type === 'select') {
+      control = document.createElement('select');
+      control.id   = `param-${p.name}`;
+      control.name = p.name;
+      (p.options || []).forEach(opt => {
+        const o = document.createElement('option');
+        o.value = opt.value;
+        o.textContent = opt.text;
+        if (opt.value === p.default) o.selected = true;
+        control.appendChild(o);
+      });
+    } else {
+      control = document.createElement('input');
+      control.type  = p.type || 'number';
+      control.id    = `param-${p.name}`;
+      control.name  = p.name;
+      control.value = p.default;
+      if (p.min  !== undefined) control.min  = p.min;
+      if (p.max  !== undefined) control.max  = p.max;
+      if (p.step !== undefined) control.step = p.step;
+
+      // Dynamic max for crop based on current image
+      if (op === 'crop' && previewImg && previewImg.naturalWidth) {
+        if (p.name === 'x1' || p.name === 'x2') control.max = previewImg.naturalWidth;
+        if (p.name === 'y1' || p.name === 'y2') control.max = previewImg.naturalHeight;
+        if (p.name === 'x2' && p.default === 200 && previewImg.naturalWidth < 200) control.value = previewImg.naturalWidth;
+        if (p.name === 'y2' && p.default === 200 && previewImg.naturalHeight < 200) control.value = previewImg.naturalHeight;
+      }
     }
 
     row.appendChild(label);
-    row.appendChild(input);
+    row.appendChild(control);
     paramsBox.appendChild(row);
   });
 
