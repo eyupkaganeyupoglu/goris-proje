@@ -14,7 +14,6 @@ from processing.crop import apply_crop
 from processing.zoom import apply_zoom
 from processing.zoom import apply_zoom
 from processing.histogram import compute_histogram, apply_histogram_stretch, apply_histogram_equalization, apply_histogram_expand
-
 from processing.arithmetic import add_images, divide_images
 from processing.contrast import apply_contrast_multiply, apply_contrast_log
 from processing.convolution import apply_mean_filter
@@ -44,7 +43,7 @@ def _save(result: np.ndarray, prefix: str) -> str:
     return f"/{path.replace(os.sep, '/')}"
 
 
-# ── 1. Grayscale ─────────────────────────────────────────────────────────────
+# Grayscale
 @router.post("/process/grayscale")
 async def grayscale(file: UploadFile = File(...)):
     img = _decode(await file.read())
@@ -52,7 +51,7 @@ async def grayscale(file: UploadFile = File(...)):
     return JSONResponse({"result_url": _save(result, "grayscale")})
 
 
-# ── 2. Binary ────────────────────────────────────────────────────────────────
+# Binary
 @router.post("/process/binary")
 async def binary(file: UploadFile = File(...), threshold: int = Form(128)):
     img = _decode(await file.read())
@@ -60,7 +59,7 @@ async def binary(file: UploadFile = File(...), threshold: int = Form(128)):
     return JSONResponse({"result_url": _save(result, "binary")})
 
 
-# ── 3. Rotation ──────────────────────────────────────────────────────────────
+# Rotation
 @router.post("/process/rotation")
 async def rotation(file: UploadFile = File(...), angle: float = Form(45.0)):
     img = _decode(await file.read())
@@ -68,7 +67,7 @@ async def rotation(file: UploadFile = File(...), angle: float = Form(45.0)):
     return JSONResponse({"result_url": _save(result, "rotation")})
 
 
-# ── 4. Crop ──────────────────────────────────────────────────────────────────
+# Crop
 @router.post("/process/crop")
 async def crop(
     file: UploadFile = File(...),
@@ -94,7 +93,7 @@ async def crop(
     return JSONResponse({"result_url": _save(result, "crop")})
 
 
-# ── 5. Zoom ──────────────────────────────────────────────────────────────────
+# Zoom
 @router.post("/process/zoom")
 async def zoom(file: UploadFile = File(...), scale: float = Form(2.0), method: str = Form("nearest")):
     img = _decode(await file.read())
@@ -102,7 +101,7 @@ async def zoom(file: UploadFile = File(...), scale: float = Form(2.0), method: s
     return JSONResponse({"result_url": _save(result, "zoom")})
 
 
-# ── 6. Color Space Conversions ───────────────────────────────────────────────
+# Color Space Conversions
 @router.post("/process/ntsc")
 async def ntsc(file: UploadFile = File(...)):
     from processing.color_space import apply_ntsc_conversion
@@ -159,10 +158,7 @@ async def luv(file: UploadFile = File(...)):
     result = apply_luv_conversion(img)
     return JSONResponse({"result_url": _save(result, "luv")})
 
-
-
-
-# ── 7b. Histogram Stretch (Germe) ────────────────────────────────────────────
+# Histogram Stretch (Germe)
 @router.post("/process/histogram-stretch")
 async def histogram_stretch(file: UploadFile = File(...)):
     img = _decode(await file.read())
@@ -176,7 +172,7 @@ async def histogram_stretch(file: UploadFile = File(...)):
     })
 
 
-# ── 7c. Histogram Equalization (Eşitleme) ────────────────────────────────────
+# Histogram Equalization (Eşitleme)
 @router.post("/process/histogram-equalize")
 async def histogram_equalize(file: UploadFile = File(...)):
     img = _decode(await file.read())
@@ -190,7 +186,7 @@ async def histogram_equalize(file: UploadFile = File(...)):
     })
 
 
-# ── 7d. Histogram Expand (Genişletme) ────────────────────────────────────────
+# Histogram Expand (Genişletme)
 @router.post("/process/histogram-expand")
 async def histogram_expand(
     file: UploadFile = File(...),
@@ -208,7 +204,7 @@ async def histogram_expand(
     })
 
 
-# ── 8a. Add Images ───────────────────────────────────────────────────────────
+# Add Images
 @router.post("/process/add")
 async def add(file1: UploadFile = File(...), file2: UploadFile = File(...)):
     img1 = _decode(await file1.read())
