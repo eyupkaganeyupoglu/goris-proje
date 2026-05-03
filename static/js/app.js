@@ -262,8 +262,6 @@ async function runOperation(op, needsSecond = false) {
 
     if (data.warning) {
       showStatus(data.warning, 'warning');
-    } else {
-      showStatus('İşlem Başarılı ✓', 'success');
     }
 
   } catch (err) {
@@ -323,10 +321,7 @@ function showStatus(msg, type = 'error') {
   statusMsg.className = 'status-msg' + (type === 'error' ? '' : ' ' + type);
   statusMsg.classList.remove('hidden');
   
-  // Sadece başarı mesajları otomatik kaybolur. Hata ve uyarılar kalıcıdır.
-  if (type === 'success') {
-    setTimeout(hideStatus, 4000);
-  }
+
 }
 
 function hideStatus() {
