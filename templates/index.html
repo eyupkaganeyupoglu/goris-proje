@@ -1,57 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Image Processing Lab</title>
-  <meta name="description" content="Manual pixel-level image processing operations built from scratch with NumPy and FastAPI." />
+  <title>Görüntü İşleme Proje Ödevi</title>
+  <meta name="description" content="Üniversite görüntü işleme dersi kapsamında geliştirilmiş proje ödevi." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/static/css/style.css" />
 </head>
 <body>
 
-
   <main class="workspace">
 
-    <!-- ── Upload Panel ─────────────────────────────────────────────────── -->
+    <!-- Yükleme Paneli -->
     <section class="panel upload-panel">
-      <h2 class="panel-title">Upload Image</h2>
+      <h2 class="panel-title">Görüntü Yükle</h2>
 
       <label class="file-drop" id="fileDrop" for="fileInput">
         <span class="drop-icon">↑</span>
-        <span class="drop-text">Click or drag an image here</span>
-        <span class="drop-hint">PNG / JPG / BMP · any size</span>
+        <span class="drop-text">Buraya tıklayın veya bir görüntü sürükleyin</span>
+        <span class="drop-hint">PNG / JPG / BMP · her boyutta</span>
         <input type="file" id="fileInput" accept="image/*" hidden />
       </label>
 
-      <!-- Second image (for arithmetic ops) -->
+      <!-- İkinci Görüntü -->
       <div id="secondFileWrap" class="second-file hidden">
-        <label class="section-label" for="fileInput2">Second Image (for Add / Divide)</label>
+        <label class="section-label" for="fileInput2">İkinci Görüntü (Toplama / Bölme için)</label>
         <label class="file-drop file-drop--sm" for="fileInput2">
           <span class="drop-icon" style="font-size:1.2rem">↑</span>
-          <span class="drop-text">Pick second image</span>
+          <span class="drop-text">İkinci görüntüyü seçin</span>
           <input type="file" id="fileInput2" accept="image/*" hidden />
         </label>
-        <img id="previewImg2" class="preview-img preview-img--sm hidden" alt="Second image preview" />
+        <img id="previewImg2" class="preview-img preview-img--sm hidden" alt="İkinci görüntü önizleme" />
       </div>
 
-      <!-- Parameters -->
+      <!-- Parametreler -->
       <div class="params" id="paramsBox"></div>
 
-      <button id="applyBtn" class="apply-btn hidden">Apply Changes</button>
+      <button id="applyBtn" class="apply-btn hidden">Değişiklikleri Uygula</button>
 
       <div id="statusMsg" class="status-msg hidden"></div>
     </section>
 
-    <!-- ── Operations Panel ──────────────────────────────────────────────── -->
+    <!-- İşlem Paneli -->
     <section class="panel ops-panel">
-      <h2 class="panel-title">Select Operation</h2>
+      <h2 class="panel-title">İşlem Seçin</h2>
 
       <div class="ops-grid" id="opsGrid">
 
         <div class="ops-group">
-          <h3 class="ops-group-title">Color</h3>
+          <h3 class="ops-group-title">Renk</h3>
           <button id="btn-grayscale"        class="op-btn" data-op="grayscale">Grayscale</button>
           <button id="btn-binary"           class="op-btn" data-op="binary"    data-params="threshold">Binary</button>
           <button id="btn-ntsc"             class="op-btn" data-op="ntsc">NTSC (YIQ)</button>
@@ -65,7 +64,7 @@
         </div>
 
         <div class="ops-group">
-          <h3 class="ops-group-title">Geometry</h3>
+          <h3 class="ops-group-title">Geometri</h3>
           <button id="btn-rotation"         class="op-btn" data-op="rotation"  data-params="angle">Rotate</button>
           <button id="btn-crop"             class="op-btn" data-op="crop"      data-params="x1,y1,x2,y2">Crop</button>
           <button id="btn-zoom"             class="op-btn" data-op="zoom"      data-params="scale,method">Zoom</button>
@@ -79,7 +78,7 @@
         </div>
 
         <div class="ops-group">
-          <h3 class="ops-group-title">Arithmetic</h3>
+          <h3 class="ops-group-title">Aritmetik</h3>
           <button id="btn-add"    class="op-btn" data-op="add"    data-needs-second="true">Add Images</button>
           <button id="btn-divide" class="op-btn" data-op="divide" data-needs-second="true">Divide Images</button>
         </div>
@@ -116,24 +115,24 @@
       </div>
     </section>
 
-    <!-- ── Preview Panel ─────────────────────────────────────────────────── -->
+    <!-- Sonuç Paneli -->
     <section class="panel preview-panel">
-      <h2 class="panel-title">Result</h2>
+      <h2 class="panel-title">Sonuç</h2>
       <div class="preview-grid">
         <div class="preview-box">
-          <p class="preview-label">Original</p>
-          <img id="previewImg" class="preview-img" src="" alt="Original image" />
-          <p class="preview-empty" id="origEmpty">No image selected</p>
+          <p class="preview-label">Orijinal</p>
+          <img id="previewImg" class="preview-img" src="" alt="Orijinal görüntü" />
+          <p class="preview-empty" id="origEmpty">Görüntü seçilmedi</p>
           <div id="origHistArea" class="hist-inline hidden">
             <p class="hist-inline-label">Histogram</p>
             <canvas id="origHistCanvas" width="512" height="150"></canvas>
           </div>
         </div>
         <div class="preview-box">
-          <p class="preview-label">Processed</p>
+          <p class="preview-label">İşlenmiş</p>
           <div class="spinner hidden" id="spinner"></div>
-          <img id="resultImg" class="preview-img" src="" alt="Result image" />
-          <p class="preview-empty" id="resultEmpty">Run an operation</p>
+          <img id="resultImg" class="preview-img" src="" alt="İşlenmiş görüntü" />
+          <p class="preview-empty" id="resultEmpty">Bir işlem çalıştırın</p>
           <div id="procHistArea" class="hist-inline hidden">
             <p class="hist-inline-label">Histogram</p>
             <canvas id="procHistCanvas" width="512" height="150"></canvas>
@@ -143,7 +142,6 @@
     </section>
 
   </main>
-
 
   <script src="/static/js/app.js"></script>
 </body>
