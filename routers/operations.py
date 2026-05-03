@@ -32,7 +32,7 @@ def _decode(file_bytes: bytes) -> np.ndarray:
     nparr = np.frombuffer(file_bytes, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
     if img is None:
-        raise HTTPException(status_code=422, detail="Could not decode image.")
+        raise HTTPException(status_code=422, detail="Görüntü dosyası okunamadı.")
     return img
 
 

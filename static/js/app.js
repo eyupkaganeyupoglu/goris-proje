@@ -186,11 +186,11 @@ function renderParams(op) {
 async function runOperation(op, needsSecond = false) {
   hideStatus();
   if (!fileInput.files.length) {
-    showStatus('Please select an image first.', 'error');
+    showStatus('Lütfen önce bir görüntü seçin.', 'error');
     return;
   }
   if (needsSecond && !fileInput2.files.length) {
-    showStatus('Please also select a second image.', 'error');
+    showStatus('Lütfen ikinci bir görüntü de seçin.', 'error');
     return;
   }
 
@@ -265,7 +265,7 @@ async function runOperation(op, needsSecond = false) {
     }
 
   } catch (err) {
-    showStatus('Error: ' + err.message, 'error');
+    showStatus('Hata: ' + err.message, 'error');
   } finally {
     setLoading(false);
   }
