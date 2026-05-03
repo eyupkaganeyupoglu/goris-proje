@@ -69,21 +69,10 @@ async def crop(
     x2: int = Form(100), y2: int = Form(100)
 ):
     img = _decode(await file.read())
-    h, w = img.shape[:2]
-
-    if x1 >= x2 or y1 >= y2:
-        return JSONResponse(
-            status_code=400,
-            content={"detail": "X1 ve Y1 değerleri sırasıyla X2 ve Y2 değerlerinden küçük olmalıdır."}
-        )
-
-    if x1 < 0 or y1 < 0 or x2 > w or y2 > h:
-        return JSONResponse(
-            status_code=400,
-            content={"detail": f"Koordinatlar resim sınırları (Genişlik: {w}, Yükseklik: {h}) içinde olmalıdır."}
-        )
-
-    result = apply_crop(img, x1=x1, y1=y1, x2=x2, y2=y2)
+    try:
+        result = apply_crop(img, x1=x1, y1=y1, x2=x2, y2=y2)
+    except ValueError as e:
+        return JSONResponse(status_code=400, content={"detail": str(e)})
     return JSONResponse({"result_url": _save(result, "crop")})
 
 # Zoom
