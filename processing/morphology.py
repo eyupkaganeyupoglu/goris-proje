@@ -1,14 +1,12 @@
 import numpy as np
+from processing.binary import apply_binary
 
 def _make_strel(size: int = 3) -> np.ndarray:
     return np.ones((size, size), dtype=np.uint8)
 
 def _to_binary(img: np.ndarray) -> np.ndarray:
-    if img.ndim == 3:
-        ch = img[:, :, 0]
-    else:
-        ch = img
-    return (ch > 127).astype(np.uint8)
+    binary_3ch = apply_binary(img, threshold=127)
+    return (binary_3ch[:, :, 0] // 255).astype(np.uint8)
 
 def _from_binary(b: np.ndarray) -> np.ndarray:
     out = (b * 255).astype(np.uint8)
