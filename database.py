@@ -2,31 +2,32 @@ import json
 import os
 from threading import Lock
 
+# Veritabanı yolu ve kilit mekanizması
 DB_PATH = os.path.join(os.path.dirname(__file__), "data", "settings.json")
 _lock = Lock()
 
-
+# Veri dosyasının varlığını kontrol et
 def _ensure_file():
     os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
     if not os.path.exists(DB_PATH):
         with open(DB_PATH, "w") as f:
             json.dump({}, f)
 
-
+# Veritabanından verileri oku
 def read_db() -> dict:
     _ensure_file()
     with _lock:
         with open(DB_PATH, "r") as f:
             return json.load(f)
 
-
+# Veritabanına veri yaz
 def write_db(data: dict) -> None:
     _ensure_file()
     with _lock:
         with open(DB_PATH, "w") as f:
             json.dump(data, f, indent=2)
 
-
+# Belirli bir veriyi güncelle
 def update_record(key: str, value) -> None:
     data = read_db()
     data[key] = value
