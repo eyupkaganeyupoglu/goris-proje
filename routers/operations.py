@@ -21,7 +21,7 @@ from processing.threshold import apply_threshold
 from processing.edge_detection import apply_edge_prewitt
 from processing.noise import add_salt_pepper, clean_mean, clean_median
 from processing.sharpening import apply_unsharp
-from processing.morphology import apply_dilate, apply_erode, apply_opening, apply_closing
+from processing.morphology import apply_dilation, apply_erosion, apply_opening, apply_closing
 
 router = APIRouter()
 RESULT_DIR = "static/temp_results"
@@ -307,19 +307,19 @@ async def noise_median(file: UploadFile = File(...)):
 
 
 # Dilation
-@router.post("/process/dilate")
-async def dilate(file: UploadFile = File(...)):
+@router.post("/process/dilation")
+async def dilation(file: UploadFile = File(...)):
     img = _decode(await file.read())
-    result = apply_dilate(img)
-    return JSONResponse({"result_url": _save(result, "dilate")})
+    result = apply_dilation(img)
+    return JSONResponse({"result_url": _save(result, "dilation")})
 
 
 # Erosion
-@router.post("/process/erode")
-async def erode(file: UploadFile = File(...)):
+@router.post("/process/erosion")
+async def erosion(file: UploadFile = File(...)):
     img = _decode(await file.read())
-    result = apply_erode(img)
-    return JSONResponse({"result_url": _save(result, "erode")})
+    result = apply_erosion(img)
+    return JSONResponse({"result_url": _save(result, "erosion")})
 
 
 # Opening

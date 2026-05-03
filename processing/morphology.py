@@ -12,7 +12,7 @@ def _from_binary(b: np.ndarray) -> np.ndarray:
     out = (b * 255).astype(np.uint8)
     return np.stack([out, out, out], axis=2)
 
-def apply_dilate(img: np.ndarray, strel_size: int = 3) -> np.ndarray:
+def apply_dilation(img: np.ndarray, strel_size: int = 3) -> np.ndarray:
     binary = _to_binary(img)
     strel = _make_strel(strel_size)
     h, w = binary.shape
@@ -26,7 +26,7 @@ def apply_dilate(img: np.ndarray, strel_size: int = 3) -> np.ndarray:
             output[i, j] = 1 if np.any(region[strel == 1] == 1) else 0
     return _from_binary(output)
 
-def apply_erode(img: np.ndarray, strel_size: int = 3) -> np.ndarray:
+def apply_erosion(img: np.ndarray, strel_size: int = 3) -> np.ndarray:
     binary = _to_binary(img)
     strel = _make_strel(strel_size)
     h, w = binary.shape
@@ -41,9 +41,9 @@ def apply_erode(img: np.ndarray, strel_size: int = 3) -> np.ndarray:
     return _from_binary(output)
 
 def apply_opening(img: np.ndarray, strel_size: int = 3) -> np.ndarray:
-    eroded = apply_erode(img, strel_size)
-    return apply_dilate(eroded, strel_size)
+    eroded = apply_erosion(img, strel_size)
+    return apply_dilation(eroded, strel_size)
 
 def apply_closing(img: np.ndarray, strel_size: int = 3) -> np.ndarray:
-    dilated = apply_dilate(img, strel_size)
-    return apply_erode(dilated, strel_size)
+    dilated = apply_dilation(img, strel_size)
+    return apply_erosion(dilated, strel_size)
