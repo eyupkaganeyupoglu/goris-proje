@@ -26,8 +26,8 @@ const procHistCanvas = document.getElementById('procHistCanvas');
 
 // Parameter definitions per operation
 const PARAM_DEFS = {
-  binary:            [{ name: 'threshold',     label: 'Threshold (0-255)', type: 'number', default: 128, min: 0, max: 255 }],
-  rotation:          [{ name: 'angle',         label: 'Angle (°)',         type: 'number', default: 45 }],
+  binary:            [{ name: 'threshold',     label: 'Eşik Değeri (0-255)', type: 'number', default: 128, min: 0, max: 255 }],
+  rotation:          [{ name: 'angle',         label: 'Açı (°)',             type: 'number', default: 45 }],
   crop:              [
                        { name: 'x1', label: 'x1', type: 'number', default: 0, min: 0 },
                        { name: 'y1', label: 'y1', type: 'number', default: 0, min: 0 },
@@ -35,18 +35,18 @@ const PARAM_DEFS = {
                        { name: 'y2', label: 'y2', type: 'number', default: 200, min: 1 },
                      ],
   zoom:              [
-                       { name: 'scale',  label: 'Scale factor', type: 'number', default: 2.0, step: 0.1, min: 0.1 },
-                       { name: 'method', label: 'Yöntem',       type: 'select', default: 'nearest', options: [
+                       { name: 'scale',  label: 'Ölçek Faktörü', type: 'number', default: 2.0, step: 0.1, min: 0.1 },
+                       { name: 'method', label: 'Yöntem',        type: 'select', default: 'nearest', options: [
                          { value: 'nearest',  text: 'Nearest (En Yakın Komşu)' },
                          { value: 'bilinear', text: 'Bilinear (Çift Doğrusal)' },
                          { value: 'bicubic',  text: 'Bicubic (Bikübik)' },
                        ]},
                      ],
-  'brightness-multiply': [{ name: 'alpha',       label: 'Alpha (>1 = brighter)', type: 'number', default: 1.5,  step: 0.1,  min: 0.1 }],
-  'contrast-log':      [{ name: 'factor',      label: 'Factor (>1 artır, <1 azalt)', type: 'number', default: 1.5,  step: 0.1,  min: 0.1 }],
-  'mean-filter':     [{ name: 'size',          label: 'Kernel size (odd)',     type: 'number', default: 3,    min: 3,     step: 2 }],
-  threshold:         [{ name: 'threshold_val', label: 'Threshold (0-255)',     type: 'number', default: 128,  min: 0,     max: 255 }],
-  'noise-add':       [{ name: 'amount',        label: 'Noise % (0.0-1.0)',     type: 'number', default: 0.05, step: 0.01, min: 0, max: 1 }],
+  'brightness-multiply': [{ name: 'alpha',       label: 'Alpha (>1 = daha parlak)', type: 'number', default: 1.5,  step: 0.1,  min: 0.1 }],
+  'contrast-log':      [{ name: 'factor',      label: 'Faktör (>1 artır, <1 azalt)', type: 'number', default: 1.5,  step: 0.1,  min: 0.1 }],
+  'mean-filter':     [{ name: 'size',          label: 'Çekirdek Boyutu (tek sayı)', type: 'number', default: 3,    min: 3,     step: 2 }],
+  threshold:         [{ name: 'threshold_val', label: 'Eşik Değeri (0-255)',     type: 'number', default: 128,  min: 0,     max: 255 }],
+  'noise-add':       [{ name: 'amount',        label: 'Gürültü % (0.0-1.0)',    type: 'number', default: 0.05, step: 0.01, min: 0, max: 1 }],
   'histogram-expand': [
                        { name: 'a', label: 'Alt Sınır (0.0-1.0)',  type: 'number', default: 0.3,  step: 0.05, min: 0, max: 1 },
                        { name: 'b', label: 'Üst Sınır (0.0-1.0)',  type: 'number', default: 0.7,  step: 0.05, min: 0, max: 1 },
