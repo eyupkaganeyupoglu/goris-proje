@@ -27,7 +27,6 @@ router = APIRouter()
 RESULT_DIR = "static/temp_results"
 os.makedirs(RESULT_DIR, exist_ok=True)
 
-
 def _decode(file_bytes: bytes) -> np.ndarray:
     nparr = np.frombuffer(file_bytes, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
@@ -35,13 +34,11 @@ def _decode(file_bytes: bytes) -> np.ndarray:
         raise HTTPException(status_code=422, detail="Görüntü dosyası okunamadı.")
     return img
 
-
 def _save(result: np.ndarray, prefix: str) -> str:
     filename = f"{prefix}_{uuid.uuid4().hex[:8]}.png"
     path = os.path.join(RESULT_DIR, filename)
     cv2.imwrite(path, result)
     return f"/{path.replace(os.sep, '/')}"
-
 
 # Grayscale
 @router.post("/process/grayscale")
@@ -50,7 +47,6 @@ async def grayscale(file: UploadFile = File(...)):
     result = apply_grayscale(img)
     return JSONResponse({"result_url": _save(result, "grayscale")})
 
-
 # Binary
 @router.post("/process/binary")
 async def binary(file: UploadFile = File(...), threshold: int = Form(128)):
@@ -58,14 +54,12 @@ async def binary(file: UploadFile = File(...), threshold: int = Form(128)):
     result = apply_binary(img, threshold=threshold)
     return JSONResponse({"result_url": _save(result, "binary")})
 
-
 # Rotation
 @router.post("/process/rotation")
 async def rotation(file: UploadFile = File(...), angle: float = Form(45.0)):
     img = _decode(await file.read())
     result = apply_rotation(img, angle_deg=angle)
     return JSONResponse({"result_url": _save(result, "rotation")})
-
 
 # Crop
 @router.post("/process/crop")
@@ -92,14 +86,12 @@ async def crop(
     result = apply_crop(img, x1=x1, y1=y1, x2=x2, y2=y2)
     return JSONResponse({"result_url": _save(result, "crop")})
 
-
 # Zoom
 @router.post("/process/zoom")
 async def zoom(file: UploadFile = File(...), scale: float = Form(2.0), method: str = Form("nearest")):
     img = _decode(await file.read())
     result = apply_zoom(img, scale=scale, method=method)
     return JSONResponse({"result_url": _save(result, "zoom")})
-
 
 # Color Space Conversions
 @router.post("/process/ntsc")
@@ -171,7 +163,6 @@ async def histogram_stretch(file: UploadFile = File(...)):
         "processed_histogram": processed_hist,
     })
 
-
 # Histogram Equalization (Eşitleme)
 @router.post("/process/histogram-equalize")
 async def histogram_equalize(file: UploadFile = File(...)):
@@ -184,7 +175,6 @@ async def histogram_equalize(file: UploadFile = File(...)):
         "original_histogram": original_hist,
         "processed_histogram": processed_hist,
     })
-
 
 # Histogram Expand (Genişletme)
 @router.post("/process/histogram-expand")
@@ -203,7 +193,6 @@ async def histogram_expand(
         "processed_histogram": processed_hist,
     })
 
-
 # Add Images
 @router.post("/process/add")
 async def add(file1: UploadFile = File(...), file2: UploadFile = File(...)):
@@ -219,7 +208,6 @@ async def add(file1: UploadFile = File(...), file2: UploadFile = File(...)):
     result = add_images(img1, img2)
     return JSONResponse({"result_url": _save(result, "add")})
 
-
 # Divide Images
 @router.post("/process/divide")
 async def divide(file1: UploadFile = File(...), file2: UploadFile = File(...)):
@@ -233,14 +221,12 @@ async def divide(file1: UploadFile = File(...), file2: UploadFile = File(...)):
     result = divide_images(img1, img2)
     return JSONResponse({"result_url": _save(result, "divide")})
 
-
 # Brightness Multiply
 @router.post("/process/brightness-multiply")
 async def brightness_multiply(file: UploadFile = File(...), alpha: float = Form(1.5)):
     img = _decode(await file.read())
     result = apply_brightness_multiply(img, alpha=alpha)
     return JSONResponse({"result_url": _save(result, "brightness_mul")})
-
 
 # Contrast Adjust
 @router.post("/process/contrast-log")
@@ -249,14 +235,12 @@ async def contrast_adjust(file: UploadFile = File(...), factor: float = Form(1.5
     result = apply_contrast_adjust(img, factor=factor)
     return JSONResponse({"result_url": _save(result, "contrast_adjust")})
 
-
 # Mean Filter
 @router.post("/process/mean-filter")
 async def mean_filter(file: UploadFile = File(...), size: int = Form(3)):
     img = _decode(await file.read())
     result = apply_mean_filter(img, size=size)
     return JSONResponse({"result_url": _save(result, "mean_filter")})
-
 
 # Unsharp
 @router.post("/process/unsharp")
@@ -265,14 +249,12 @@ async def unsharp(file: UploadFile = File(...)):
     result = apply_unsharp(img)
     return JSONResponse({"result_url": _save(result, "unsharp")})
 
-
 # Threshold
 @router.post("/process/threshold")
 async def threshold(file: UploadFile = File(...), threshold_val: int = Form(128)):
     img = _decode(await file.read())
     result = apply_threshold(img, threshold=threshold_val)
     return JSONResponse({"result_url": _save(result, "threshold")})
-
 
 # Edge Detection (Prewitt)
 @router.post("/process/edge")
@@ -281,14 +263,12 @@ async def edge(file: UploadFile = File(...)):
     result = apply_edge_prewitt(img)
     return JSONResponse({"result_url": _save(result, "edge")})
 
-
 # Add Noise
 @router.post("/process/noise-add")
 async def noise_add(file: UploadFile = File(...), amount: float = Form(0.05)):
     img = _decode(await file.read())
     result = add_salt_pepper(img, amount=amount)
     return JSONResponse({"result_url": _save(result, "noise_add")})
-
 
 # Clean Mean
 @router.post("/process/noise-mean")
@@ -297,14 +277,12 @@ async def noise_mean(file: UploadFile = File(...)):
     result = clean_mean(img)
     return JSONResponse({"result_url": _save(result, "noise_mean")})
 
-
 # Clean Median
 @router.post("/process/noise-median")
 async def noise_median(file: UploadFile = File(...)):
     img = _decode(await file.read())
     result = clean_median(img)
     return JSONResponse({"result_url": _save(result, "noise_median")})
-
 
 # Dilation
 @router.post("/process/dilation")
@@ -313,7 +291,6 @@ async def dilation(file: UploadFile = File(...)):
     result = apply_dilation(img)
     return JSONResponse({"result_url": _save(result, "dilation")})
 
-
 # Erosion
 @router.post("/process/erosion")
 async def erosion(file: UploadFile = File(...)):
@@ -321,14 +298,12 @@ async def erosion(file: UploadFile = File(...)):
     result = apply_erosion(img)
     return JSONResponse({"result_url": _save(result, "erosion")})
 
-
 # Opening
 @router.post("/process/opening")
 async def opening(file: UploadFile = File(...)):
     img = _decode(await file.read())
     result = apply_opening(img)
     return JSONResponse({"result_url": _save(result, "opening")})
-
 
 # Closing
 @router.post("/process/closing")
