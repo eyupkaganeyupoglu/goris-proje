@@ -209,7 +209,6 @@ async def histogram_expand(
 async def add(file1: UploadFile = File(...), file2: UploadFile = File(...)):
     img1 = _decode(await file1.read())
     img2 = _decode(await file2.read())
-    # Resize img2 to match img1 if needed (nearest-neighbor, manual)
     if img1.shape != img2.shape:
         from processing.zoom import apply_zoom
         scale_h = img1.shape[0] / img2.shape[0]
@@ -307,7 +306,7 @@ async def noise_median(file: UploadFile = File(...)):
     return JSONResponse({"result_url": _save(result, "noise_median")})
 
 
-# Dilate
+# Dilation
 @router.post("/process/dilate")
 async def dilate(file: UploadFile = File(...)):
     img = _decode(await file.read())
@@ -315,7 +314,7 @@ async def dilate(file: UploadFile = File(...)):
     return JSONResponse({"result_url": _save(result, "dilate")})
 
 
-# Erode
+# Erosion
 @router.post("/process/erode")
 async def erode(file: UploadFile = File(...)):
     img = _decode(await file.read())
