@@ -1,4 +1,4 @@
-/* ── Reset & Base ──────────────────────────────────────────────────────────── */
+/* Reset & Base */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
@@ -31,8 +31,7 @@ body {
   flex-direction: column;
 }
 
-
-/* ── Workspace ─────────────────────────────────────────────────────────────── */
+/* Workspace */
 .workspace {
   display: grid;
   grid-template-columns: 320px 1fr;
@@ -45,7 +44,7 @@ body {
   margin: 0 auto;
 }
 
-/* ── Panel ─────────────────────────────────────────────────────────────────── */
+/* Panel */
 .panel {
   background: var(--bg-panel);
   border: 1px solid var(--border);
@@ -61,7 +60,7 @@ body {
   margin-bottom: 1.1rem;
 }
 
-/* ── Upload Panel ──────────────────────────────────────────────────────────── */
+/* Upload Panel */
 .upload-panel { grid-column: 1; grid-row: 1; }
 
 .file-drop {
@@ -93,7 +92,7 @@ body {
 .second-file { margin-top: 1rem; }
 .section-label { font-size: 0.75rem; color: var(--text-dim); display: block; margin-bottom: 0.3rem; }
 
-/* ── Params ────────────────────────────────────────────────────────────────── */
+/* Params */
 .params {
   margin-top: 1rem;
   display: flex;
@@ -178,7 +177,7 @@ body {
   transform: translateY(1px);
 }
 
-/* ── Status Message ────────────────────────────────────────────────────────── */
+/* Status Message */
 .status-msg {
   margin-top: 0.75rem;
   font-size: 0.8rem;
@@ -195,7 +194,7 @@ body {
   border-color: rgba(245,158,11,0.25);
 }
 
-/* ── Operations Panel ──────────────────────────────────────────────────────── */
+/* Operations Panel */
 .ops-panel {
   grid-column: 1;
   grid-row: 2;
@@ -249,7 +248,7 @@ body {
   transform: none;
 }
 
-/* ── Preview Panel ─────────────────────────────────────────────────────────── */
+/* Preview Panel */
 .preview-panel {
   grid-column: 2;
   grid-row: 1 / 3;
@@ -343,11 +342,10 @@ body {
   border-radius: 4px;
 }
 
-/* ── Utility ────────────────────────────────────────────────────────────────── */
+/* Utility */
 .hidden { display: none !important; }
 
-
-/* ── Responsive ─────────────────────────────────────────────────────────────── */
+/* Responsive */
 @media (max-width: 900px) {
   .workspace {
     grid-template-columns: 1fr;

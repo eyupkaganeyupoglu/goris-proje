@@ -1,11 +1,11 @@
 'use strict';
 
-// ── State ──────────────────────────────────────────────────────────────────
-let selectedOp = null;           // currently selected operation slug
-let activeBtn  = null;           // DOM button currently active
-let selectedNeedsSecond = false; // whether the current op needs a second image
+// State
+let selectedOp = null;
+let activeBtn  = null;
+let selectedNeedsSecond = false;
 
-// ── DOM refs ───────────────────────────────────────────────────────────────
+// DOM refs
 const fileInput      = document.getElementById('fileInput');
 const fileInput2     = document.getElementById('fileInput2');
 const fileDrop       = document.getElementById('fileDrop');
@@ -24,7 +24,7 @@ const origHistCanvas = document.getElementById('origHistCanvas');
 const procHistArea   = document.getElementById('procHistArea');
 const procHistCanvas = document.getElementById('procHistCanvas');
 
-// ── Parameter definitions per operation ───────────────────────────────────
+// Parameter definitions per operation
 const PARAM_DEFS = {
   binary:            [{ name: 'threshold',     label: 'Threshold (0-255)', type: 'number', default: 128, min: 0, max: 255 }],
   rotation:          [{ name: 'angle',         label: 'Angle (°)',         type: 'number', default: 45 }],
@@ -53,7 +53,7 @@ const PARAM_DEFS = {
                      ],
 };
 
-// ── Image preview on file select ───────────────────────────────────────────
+// Image preview on file select
 fileInput.addEventListener('change', (e) => {
   const file = e.target.files[0];
   if (!file) return;
@@ -76,7 +76,7 @@ previewImg.addEventListener('load', () => {
   }
 });
 
-// ── Drag & drop ────────────────────────────────────────────────────────────
+// Drag & drop
 fileDrop.addEventListener('dragover', (e) => { e.preventDefault(); fileDrop.classList.add('active'); });
 fileDrop.addEventListener('dragleave', () => fileDrop.classList.remove('active'));
 fileDrop.addEventListener('drop', (e) => {
@@ -89,12 +89,12 @@ fileDrop.addEventListener('drop', (e) => {
   }
 });
 
-// ── Apply button click ─────────────────────────────────────────────────────
+// Apply button click
 applyBtn.addEventListener('click', () => {
   if (selectedOp) runOperation(selectedOp, selectedNeedsSecond);
 });
 
-// ── Operation button clicks ────────────────────────────────────────────────
+// Operation button clicks
 document.getElementById('opsGrid').addEventListener('click', (e) => {
   const btn = e.target.closest('.op-btn');
   if (!btn) return;
@@ -126,7 +126,7 @@ document.getElementById('opsGrid').addEventListener('click', (e) => {
   }
 });
 
-// ── Render parameter inputs ────────────────────────────────────────────────
+// Render parameter inputs
 function renderParams(op) {
   paramsBox.innerHTML = '';
   const defs = PARAM_DEFS[op];
@@ -182,7 +182,7 @@ function renderParams(op) {
   applyBtn.classList.remove('hidden');
 }
 
-// ── Run the operation ──────────────────────────────────────────────────────
+// Run the operation
 async function runOperation(op, needsSecond = false) {
   hideStatus();
   if (!fileInput.files.length) {
@@ -271,7 +271,7 @@ async function runOperation(op, needsSecond = false) {
   }
 }
 
-// ── Draw inline histogram (under preview boxes) ─────────────────────────────
+// Draw inline histogram
 function drawInlineHistogram(canvas, hist, accentColor) {
   const ctx = canvas.getContext('2d');
   const W = canvas.width;
@@ -309,7 +309,7 @@ function drawInlineHistogram(canvas, hist, accentColor) {
   ctx.globalAlpha = 1.0;
 }
 
-// ── UI helpers ─────────────────────────────────────────────────────────────
+// UI helpers
 function setLoading(on) {
   spinner.classList.toggle('hidden', !on);
   resultImg.classList.toggle('faded', on);
