@@ -1,5 +1,4 @@
 import numpy as np
-from processing.grayscale import apply_grayscale
 
 def _split_bgr(img: np.ndarray):
     # Görüntüyü float32 tipine çevirip R, G ve B kanallarını ayırır
@@ -8,11 +7,6 @@ def _split_bgr(img: np.ndarray):
     G = img_f[:, :, 1]
     R = img_f[:, :, 2]
     return R, G, B
-
-# RGB to Grayscale
-def apply_grayscale_conversion(img: np.ndarray) -> np.ndarray:
-    # Kod tekrarını önlemek için ana grayscale modülündeki fonksiyonu çağırır
-    return apply_grayscale(img)
 
 # RGB to NTSC
 def apply_ntsc_conversion(img: np.ndarray) -> np.ndarray:
