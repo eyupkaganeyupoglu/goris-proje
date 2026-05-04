@@ -12,7 +12,6 @@ from processing.binary import apply_binary
 from processing.rotation import apply_rotation
 from processing.crop import apply_crop
 from processing.zoom import apply_zoom
-from processing.zoom import apply_zoom
 from processing.histogram import compute_histogram, apply_histogram_stretch, apply_histogram_equalization, apply_histogram_expand
 from processing.arithmetic import add_images, divide_images
 from processing.contrast import apply_brightness_multiply, apply_contrast_adjust
@@ -22,6 +21,7 @@ from processing.edge_detection import apply_edge_prewitt
 from processing.noise import add_salt_pepper, clean_mean, clean_median
 from processing.sharpening import apply_unsharp
 from processing.morphology import apply_dilation, apply_erosion, apply_opening, apply_closing
+from processing.color_space import (apply_ntsc_conversion, apply_ycbcr_conversion, apply_cmy_conversion, apply_cmyk_conversion, apply_hsi_conversion, apply_xyz_conversion, apply_lab_conversion, apply_luv_conversion)
 
 router = APIRouter()
 RESULT_DIR = "static/temp_results"
@@ -63,11 +63,7 @@ async def rotation(file: UploadFile = File(...), angle: float = Form(45.0)):
 
 # Crop
 @router.post("/process/crop")
-async def crop(
-    file: UploadFile = File(...),
-    x1: int = Form(0), y1: int = Form(0),
-    x2: int = Form(100), y2: int = Form(100)
-):
+async def crop(file: UploadFile = File(...), x1: int = Form(0), y1: int = Form(0), x2: int = Form(100), y2: int = Form(100)):
     img = _decode(await file.read())
     try:
         result = apply_crop(img, x1=x1, y1=y1, x2=x2, y2=y2)
@@ -85,56 +81,48 @@ async def zoom(file: UploadFile = File(...), scale: float = Form(2.0), method: s
 # Color Space Conversions
 @router.post("/process/ntsc")
 async def ntsc(file: UploadFile = File(...)):
-    from processing.color_space import apply_ntsc_conversion
     img = _decode(await file.read())
     result = apply_ntsc_conversion(img)
     return JSONResponse({"result_url": _save(result, "ntsc")})
 
 @router.post("/process/ycbcr")
 async def ycbcr(file: UploadFile = File(...)):
-    from processing.color_space import apply_ycbcr_conversion
     img = _decode(await file.read())
     result = apply_ycbcr_conversion(img)
     return JSONResponse({"result_url": _save(result, "ycbcr")})
 
 @router.post("/process/cmy")
 async def cmy(file: UploadFile = File(...)):
-    from processing.color_space import apply_cmy_conversion
     img = _decode(await file.read())
     result = apply_cmy_conversion(img)
     return JSONResponse({"result_url": _save(result, "cmy")})
 
 @router.post("/process/cmyk")
 async def cmyk(file: UploadFile = File(...)):
-    from processing.color_space import apply_cmyk_conversion
     img = _decode(await file.read())
     result = apply_cmyk_conversion(img)
     return JSONResponse({"result_url": _save(result, "cmyk")})
 
 @router.post("/process/hsi")
 async def hsi(file: UploadFile = File(...)):
-    from processing.color_space import apply_hsi_conversion
     img = _decode(await file.read())
     result = apply_hsi_conversion(img)
     return JSONResponse({"result_url": _save(result, "hsi")})
 
 @router.post("/process/xyz")
 async def xyz(file: UploadFile = File(...)):
-    from processing.color_space import apply_xyz_conversion
     img = _decode(await file.read())
     result = apply_xyz_conversion(img)
     return JSONResponse({"result_url": _save(result, "xyz")})
 
 @router.post("/process/lab")
 async def lab(file: UploadFile = File(...)):
-    from processing.color_space import apply_lab_conversion
     img = _decode(await file.read())
     result = apply_lab_conversion(img)
     return JSONResponse({"result_url": _save(result, "lab")})
 
 @router.post("/process/luv")
 async def luv(file: UploadFile = File(...)):
-    from processing.color_space import apply_luv_conversion
     img = _decode(await file.read())
     result = apply_luv_conversion(img)
     return JSONResponse({"result_url": _save(result, "luv")})
@@ -167,11 +155,7 @@ async def histogram_equalize(file: UploadFile = File(...)):
 
 # Histogram Expand (Genişletme)
 @router.post("/process/histogram-expand")
-async def histogram_expand(
-    file: UploadFile = File(...),
-    a: float = Form(0.3),
-    b: float = Form(0.7),
-):
+async def histogram_expand(file: UploadFile = File(...), a: float = Form(0.3), b: float = Form(0.7)):
     img = _decode(await file.read())
     original_hist = compute_histogram(img)
     result = apply_histogram_expand(img, a=a, b=b)
@@ -187,13 +171,6 @@ async def histogram_expand(
 async def add(file1: UploadFile = File(...), file2: UploadFile = File(...)):
     img1 = _decode(await file1.read())
     img2 = _decode(await file2.read())
-    if img1.shape != img2.shape:
-        from processing.zoom import apply_zoom
-        scale_h = img1.shape[0] / img2.shape[0]
-        scale_w = img1.shape[1] / img2.shape[1]
-        scale = min(scale_h, scale_w)
-        img2 = apply_zoom(img2, scale)
-        img2 = img2[:img1.shape[0], :img1.shape[1]]
     result = add_images(img1, img2)
     return JSONResponse({"result_url": _save(result, "add")})
 
@@ -202,11 +179,6 @@ async def add(file1: UploadFile = File(...), file2: UploadFile = File(...)):
 async def divide(file1: UploadFile = File(...), file2: UploadFile = File(...)):
     img1 = _decode(await file1.read())
     img2 = _decode(await file2.read())
-    if img1.shape != img2.shape:
-        from processing.zoom import apply_zoom
-        scale = img1.shape[0] / img2.shape[0]
-        img2 = apply_zoom(img2, scale)
-        img2 = img2[:img1.shape[0], :img1.shape[1]]
     result = divide_images(img1, img2)
     return JSONResponse({"result_url": _save(result, "divide")})
 
