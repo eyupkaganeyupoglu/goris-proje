@@ -2,11 +2,13 @@ import os
 import uuid
 import io
 
+# Temel kütüphaneler
 import cv2
 import numpy as np
 from fastapi import APIRouter, File, Form, UploadFile, HTTPException
 from fastapi.responses import JSONResponse
 
+# İşlem fonksiyonları
 from processing.grayscale import apply_grayscale
 from processing.binary import apply_binary
 from processing.rotation import apply_rotation
@@ -23,10 +25,12 @@ from processing.sharpening import apply_unsharp
 from processing.morphology import apply_dilation, apply_erosion, apply_opening, apply_closing
 from processing.color_space import (apply_ntsc_conversion, apply_ycbcr_conversion, apply_cmy_conversion, apply_cmyk_conversion, apply_hsi_conversion, apply_xyz_conversion, apply_lab_conversion, apply_luv_conversion)
 
+# API yönlendiricisi ve sonuç dizini ayarları
 router = APIRouter()
 RESULT_DIR = "static/temp_results"
 os.makedirs(RESULT_DIR, exist_ok=True)
 
+# Bayt verisini görüntüye dönüştürür
 def _decode(file_bytes: bytes) -> np.ndarray:
     nparr = np.frombuffer(file_bytes, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
@@ -34,6 +38,7 @@ def _decode(file_bytes: bytes) -> np.ndarray:
         raise HTTPException(status_code=422, detail="Görüntü dosyası okunamadı.")
     return img
 
+# İşlenen görüntüyü kaydeder ve URL döner
 def _save(result: np.ndarray, prefix: str) -> str:
     filename = f"{prefix}_{uuid.uuid4().hex[:8]}.png"
     path = os.path.join(RESULT_DIR, filename)
