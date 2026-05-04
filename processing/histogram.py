@@ -1,19 +1,25 @@
 import numpy as np
 from processing.grayscale import apply_grayscale
 
-# Histogram hesaplama
-def compute_histogram(img: np.ndarray) -> list:
-    # Görüntüyü gri tonlamaya çevirir ve tek kanal üzerinden boyutlarını alır
+# Görüntüyü gri tonlamaya çevirir ve 3 kanallı gri görüntü ile tek kanal verisini döndürür
+def _get_gray_and_channel(img: np.ndarray):
     gray = apply_grayscale(img)
-    channel = gray[:, :, 0]
+    return gray, gray[:, :, 0]
+
+# Tek kanallı görüntü üzerinden yoğunluk değerlerini sayarak histogram listesi oluşturur
+def _compute_hist_from_channel(channel: np.ndarray) -> list:
     h, w = channel.shape
-    
-    # Her pikselin yoğunluk değerini sayarak histogram listesini oluşturur
     hist = [0] * 256
     for i in range(h):
         for j in range(w):
             hist[int(channel[i, j])] += 1
     return hist
+
+# Histogram hesaplama
+def compute_histogram(img: np.ndarray) -> list:
+    # Görüntüyü gri tonlamaya çevirir ve histogramını hesaplar
+    _, channel = _get_gray_and_channel(img)
+    return _compute_hist_from_channel(channel)
 
 # Histogram germe
 def apply_histogram_stretch(img: np.ndarray, a: int = 0, b: int = 255) -> np.ndarray:
@@ -32,16 +38,12 @@ def apply_histogram_stretch(img: np.ndarray, a: int = 0, b: int = 255) -> np.nda
 # Histogram eşitleme
 def apply_histogram_equalization(img: np.ndarray) -> np.ndarray:
     # Görüntüyü gri tonlamaya çevirir ve toplam piksel sayısını hesaplar
-    gray = apply_grayscale(img)
-    channel = gray[:, :, 0]
+    gray, channel = _get_gray_and_channel(img)
     h, w = channel.shape
     total_pixels = h * w
 
     # Görüntünün histogramını (yoğunluk dağılımını) hesaplar
-    hist = [0] * 256
-    for i in range(h):
-        for j in range(w):
-            hist[int(channel[i, j])] += 1
+    hist = _compute_hist_from_channel(channel)
 
     # Kümülatif dağılım fonksiyonunu (CDF) hesaplar
     cdf = [0] * 256
