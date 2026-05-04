@@ -1,6 +1,5 @@
 import os
 import uuid
-import io
 
 # Temel kütüphaneler
 import cv2
