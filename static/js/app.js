@@ -265,7 +265,7 @@ async function runOperation(op, needsSecond = false) {
     }
 
   } catch (err) {
-    showStatus('Hata: ' + err.message, 'error');
+    showStatus(err.message, 'error');
   } finally {
     setLoading(false);
   }

@@ -83,7 +83,7 @@ def apply_histogram_expand(img: np.ndarray, a: float = 0.3, b: float = 0.7) -> n
     lo = float(a)
     hi = float(b)
     if hi <= lo:
-        return img
+        raise ValueError("'b' değeri 'a' değerinden büyük olmalıdır.")
     
     # Belirlenen [a, b] aralığındaki değerleri tüm aralığa genişletir (expand)
     expanded = (1.0 / (hi - lo)) * (img_f - lo)

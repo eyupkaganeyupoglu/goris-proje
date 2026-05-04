@@ -162,7 +162,12 @@ async def histogram_equalize(file: UploadFile = File(...)):
 async def histogram_expand(file: UploadFile = File(...), a: float = Form(0.3), b: float = Form(0.7)):
     img = _decode(await file.read())
     original_hist = compute_histogram(img)
-    result = apply_histogram_expand(img, a=a, b=b)
+    
+    try:
+        result = apply_histogram_expand(img, a=a, b=b)
+    except ValueError as e:
+        return JSONResponse(status_code=400, content={"detail": str(e)})
+        
     processed_hist = compute_histogram(result)
     return JSONResponse({
         "result_url": _save(result, "hist_expand"),
