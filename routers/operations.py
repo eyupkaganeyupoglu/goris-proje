@@ -20,7 +20,7 @@ from processing.contrast import apply_brightness_multiply, apply_contrast_adjust
 from processing.convolution import apply_mean_filter
 from processing.threshold import apply_threshold
 from processing.edge_detection import apply_edge_prewitt
-from processing.noise import add_salt_pepper, clean_mean, clean_median
+from processing.noise import add_salt_pepper, clean_median
 from processing.sharpening import apply_unsharp
 from processing.morphology import apply_dilation, apply_erosion, apply_opening, apply_closing
 from processing.color_space import (apply_ntsc_conversion, apply_ycbcr_conversion, apply_cmy_conversion, apply_cmyk_conversion, apply_hsi_conversion, apply_xyz_conversion, apply_lab_conversion, apply_luv_conversion)
@@ -235,13 +235,6 @@ async def noise_add(file: UploadFile = File(...), amount: float = Form(0.05)):
     img = _decode(await file.read())
     result = add_salt_pepper(img, amount=amount)
     return JSONResponse({"result_url": _save(result, "noise_add")})
-
-# Clean Mean
-@router.post("/process/noise-mean")
-async def noise_mean(file: UploadFile = File(...)):
-    img = _decode(await file.read())
-    result = clean_mean(img)
-    return JSONResponse({"result_url": _save(result, "noise_mean")})
 
 # Clean Median
 @router.post("/process/noise-median")

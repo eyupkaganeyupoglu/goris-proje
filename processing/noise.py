@@ -23,13 +23,6 @@ def add_salt_pepper(img: np.ndarray, amount: float = 0.05) -> np.ndarray:
     return result
 
 
-# Ortalama filtresiyle gürültü temizleme
-def clean_mean(img: np.ndarray) -> np.ndarray:
-    # Gürültü temizleme için hazır ortalama (mean) filtresini kullanır
-    from processing.convolution import apply_mean_filter
-    return apply_mean_filter(img, size=3)
-
-
 # Median filtresiyle gürültü temizleme
 def clean_median(img: np.ndarray, size: int = 3) -> np.ndarray:
     # Filtre boyutu için padding miktarını hesaplar ve sonuç matrisini hazırlar
