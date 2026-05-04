@@ -8,6 +8,23 @@ def _split_bgr(img: np.ndarray):
     R = img_f[:, :, 2]
     return R, G, B
 
+def _rgb_to_xyz(R: np.ndarray, G: np.ndarray, B: np.ndarray):
+    # RGB'den XYZ koordinatlarına geçiş sağlayan lineerleştirme ve katsayı çarpımı
+    def linearize(ch):
+        c = ch / 255.0
+        return np.where(c > 0.04045, ((c + 0.055) / 1.055) ** 2.4, c / 12.92)
+
+    Rl = linearize(R)
+    Gl = linearize(G)
+    Bl = linearize(B)
+
+    # Lineer RGB'den XYZ bileşenlerine geçiş yapar
+    X = 0.4124564 * Rl + 0.3575761 * Gl + 0.1804375 * Bl
+    Y = 0.2126729 * Rl + 0.7151522 * Gl + 0.0721750 * Bl
+    Z = 0.0193339 * Rl + 0.1191920 * Gl + 0.9503041 * Bl
+    
+    return X, Y, Z
+
 # RGB to NTSC
 def apply_ntsc_conversion(img: np.ndarray) -> np.ndarray:
     # RGB görüntüyü NTSC (YIQ) renk uzayına dönüştürür
@@ -125,21 +142,8 @@ def apply_xyz_conversion(img: np.ndarray) -> np.ndarray:
     # RGB görüntüyü CIE XYZ renk uzayına dönüştürür
     R, G, B = _split_bgr(img)
 
-    # Lineerleştirme (Gamma Correction tersi) uygular
-    def linearize(ch):
-        c = ch / 255.0
-        return np.where(c > 0.04045,
-                        ((c + 0.055) / 1.055) ** 2.4,
-                        c / 12.92)
-
-    Rl = linearize(R)
-    Gl = linearize(G)
-    Bl = linearize(B)
-
-    # Lineer RGB'den XYZ bileşenlerine geçiş yapar
-    X = 0.4124564 * Rl + 0.3575761 * Gl + 0.1804375 * Bl
-    Y = 0.2126729 * Rl + 0.7151522 * Gl + 0.0721750 * Bl
-    Z = 0.0193339 * Rl + 0.1191920 * Gl + 0.9503041 * Bl
+    # XYZ bileşenlerini hesaplar
+    X, Y, Z = _rgb_to_xyz(R, G, B)
 
     # XYZ değerlerini D65 referans beyazına göre normalize ve ölçekleme yapar
     X_scaled = np.clip(X / 0.95047 * 255, 0, 255)
@@ -153,21 +157,8 @@ def apply_lab_conversion(img: np.ndarray) -> np.ndarray:
     # RGB görüntüyü CIE L*a*b* renk uzayına dönüştürür
     R, G, B = _split_bgr(img)
 
-    # Lineerleştirme (Gamma Correction tersi) uygular
-    def linearize(ch):
-        c = ch / 255.0
-        return np.where(c > 0.04045,
-                        ((c + 0.055) / 1.055) ** 2.4,
-                        c / 12.92)
-
-    Rl = linearize(R)
-    Gl = linearize(G)
-    Bl = linearize(B)
-
     # XYZ bileşenlerini hesaplar
-    X = 0.4124564 * Rl + 0.3575761 * Gl + 0.1804375 * Bl
-    Y = 0.2126729 * Rl + 0.7151522 * Gl + 0.0721750 * Bl
-    Z = 0.0193339 * Rl + 0.1191920 * Gl + 0.9503041 * Bl
+    X, Y, Z = _rgb_to_xyz(R, G, B)
 
     # D65 referans beyazı ve Lab dönüşüm katsayıları
     Xn, Yn, Zn = 0.95047, 1.0, 1.08883
@@ -201,19 +192,8 @@ def apply_luv_conversion(img: np.ndarray) -> np.ndarray:
     # RGB görüntüyü CIE L*u*v* renk uzayına dönüştürür
     R, G, B = _split_bgr(img)
 
-    # Lineerleştirme (Gamma Correction tersi) uygular
-    def linearize(ch):
-        c = ch / 255.0
-        return np.where(c > 0.04045, ((c + 0.055) / 1.055) ** 2.4, c / 12.92)
-
-    Rl = linearize(R)
-    Gl = linearize(G)
-    Bl = linearize(B)
-
     # XYZ bileşenlerini hesaplar
-    X = 0.4124564 * Rl + 0.3575761 * Gl + 0.1804375 * Bl
-    Y = 0.2126729 * Rl + 0.7151522 * Gl + 0.0721750 * Bl
-    Z = 0.0193339 * Rl + 0.1191920 * Gl + 0.9503041 * Bl
+    X, Y, Z = _rgb_to_xyz(R, G, B)
 
     # Referans beyaz noktası ve katsayıları belirler
     Xn, Yn, Zn = 0.95047, 1.0, 1.08883
