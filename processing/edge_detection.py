@@ -1,5 +1,4 @@
 import numpy as np
-from processing.convolution import convolve
 from processing.grayscale import apply_grayscale
 
 # Prewitt kenar tespit operatörleri (Yatay ve Dikey)
