@@ -1,10 +1,6 @@
-# Görüntü İşleme Projesi
-
-Bu proje, NumPy kullanarak manuel piksel seviyesinde görüntü işleme işlemleri gerçekleştiren bir FastAPI web uygulamasıdır.
-
 ## Kurulum ve Çalıştırma
 
-Aşağıdaki adımları sırasıyla terminale (PowerShell veya CMD) yazarak projeyi hazır hale getirebilirsiniz.
+Aşağıdaki adımları sırasıyla terminale (CMD) yazarak projeyi hazır hale getirebilirsiniz.
 
 ### 1. Kütüphaneleri Yükleme
 Öncelikle gerekli tüm araçları yüklemek için şu komutu çalıştırın:
@@ -14,7 +10,7 @@ pip install -r requirements.txt
 
 ### 2. Sanal Ortamı (venv) Aktifleştirme
 Windows kullanıyorsanız, projeyi çalıştırmadan önce sanal ortamı aktif etmelisiniz:
-```powershell
+```bash
 .\venv\Scripts\activate
 ```
 
